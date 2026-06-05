@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 export default function Page() {
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+    <div className="min-h-screen  font-sans  ">
       {/* --- HERO SECTION --- */}
       <header className="relative overflow-hidden py-20 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -11,11 +11,11 @@ export default function Page() {
             Next-Gen School Management
           </span>
 
-          <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-slate-900 sm:text-6xl">
+          <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight  sm:text-6xl">
             Simplify administration, empower teachers, and engage parents.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-500">
             The all-in-one platform for modern schools. Handle grading,
             attendance, scheduling, and communication effortlessly from a
             unified dashboard.
