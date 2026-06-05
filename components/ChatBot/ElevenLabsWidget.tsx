@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
+import React from 'react';
 
 export default function ElevenLabsWidget() {
   const [agentId, setAgentId] = useState('');
@@ -19,9 +20,10 @@ export default function ElevenLabsWidget() {
         strategy="afterInteractive"
       />
 
-      {agentId && (
-        <elevenlabs-convai agent-id={agentId} />
-      )}
+      {agentId &&
+        React.createElement('elevenlabs-convai', {
+          'agent-id': agentId,
+        })}
     </>
   );
 }
