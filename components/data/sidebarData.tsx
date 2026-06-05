@@ -114,7 +114,7 @@ import {
 interface SubMenuItem {
   id: string;
   label: string;
-   href: string;
+  href: string;
   icon: LucideIcon;
   badge?: string;
   isNew?: boolean;
@@ -124,7 +124,7 @@ interface SubMenuItem {
 interface MenuItem {
   id: string;
   label: string;
-   href: string;
+  href: string;
   icon: React.ComponentType<any>;
   badge?: string;
   isNew?: boolean;
@@ -144,7 +144,7 @@ export const menuData: MenuSection[] = [
       {
         id: "dashboard",
         label: "Dashboard",
-         href: "/dashboard",
+        href: "/dashboard",
         icon: Home,
       },
     ],
@@ -156,26 +156,26 @@ export const menuData: MenuSection[] = [
       {
         id: "front-office",
         label: "Front Office",
-        href:"/",       
+        href: "/",
         icon: ClipboardList,
         badge: "7",
         children: [
           {
             id: "visitors-log",
             label: "Visitors Log",
-          href: "/blank",
+            href: "/front-office/visitors",
             icon: History,
           },
           {
             id: "phone-calls",
             label: "Phone Calls",
-             href: "#",
+            href: "/front-office/phone-calls",
             icon: Phone,
           },
           {
             id: "half-day-notices",
             label: "Half Day Notices",
-            href: "#",
+            href: "/blank",
             icon: CalendarClock,
           },
           {
@@ -188,14 +188,14 @@ export const menuData: MenuSection[] = [
           {
             id: "admission-enquiries",
             label: "Admission Enquiries",
-             href: "#",
+            href: "#",
             icon: MessageCircleQuestionMark,
             isNew: true,
           },
           {
             id: "complaints",
             label: "Complaints",
-          href: "#",
+            href: "#",
             icon: MessageSquareWarning,
           },
           {
@@ -233,13 +233,13 @@ export const menuData: MenuSection[] = [
       {
         id: "promote-student",
         label: "Promote Student",
-          href: "#",
+        href: "#",
         icon: UserPen,
       },
       {
         id: "roll-numbers",
         label: "Roll Numbers",
-         href: "#",
+        href: "#",
         icon: ListOrdered,
       },
     ],
@@ -263,13 +263,13 @@ export const menuData: MenuSection[] = [
       {
         id: "half-day-notices",
         label: "Half Day Notices",
-          href: "#",
+        href: "#",
         icon: CalendarClock,
       },
       {
         id: "staff-attendance",
         label: "Staff Attendance",
-         href: "#",
+        href: "#",
         icon: ContactRound,
       },
       {
@@ -287,13 +287,13 @@ export const menuData: MenuSection[] = [
       {
         id: "collect-fees",
         label: "Collect Fees",
-       href: "#",
+        href: "#",
         icon: BadgeIndianRupee,
       },
       {
         id: "fees-invoices",
         label: "Fees Invoices",
-      href: "#",
+        href: "#",
         icon: FileText,
       },
       {
@@ -312,13 +312,13 @@ export const menuData: MenuSection[] = [
           {
             id: "class-fee-plans",
             label: "Class Fee Plans",
-             href: "#",
+            href: "#",
             icon: ReceiptText,
           },
           {
             id: "fee-fine-rules",
             label: "Fee Fine Rules",
-           href: "#",
+            href: "#",
             icon: Scale,
           },
         ],
@@ -327,7 +327,7 @@ export const menuData: MenuSection[] = [
       {
         id: "miscellaneous",
         label: "Miscellaneous",
-         href: "#",
+        href: "#",
         icon: Coins,
       },
 
@@ -341,13 +341,13 @@ export const menuData: MenuSection[] = [
           {
             id: "cashflow",
             label: "Cashflow",
-             href: "#",
+            href: "#",
             icon: CircleDollarSign,
           },
           {
             id: "ledger",
             label: "Ledger",
-           href: "#",
+            href: "#",
             icon: BookOpenText,
           },
         ],
@@ -363,7 +363,7 @@ export const menuData: MenuSection[] = [
           {
             id: "expense-head",
             label: "Expense Head",
-           href: "#",
+            href: "#",
             icon: Receipt,
           },
           {
@@ -375,7 +375,7 @@ export const menuData: MenuSection[] = [
           {
             id: "add-expense",
             label: "Add Expense",
-           href: "#",
+            href: "#",
             icon: BadgeIndianRupee,
           },
         ],
@@ -384,26 +384,26 @@ export const menuData: MenuSection[] = [
       {
         id: "report",
         label: "Fees Report",
-      href: "#",
+        href: "#",
         badge: "5",
         icon: BarChart3,
         children: [
           {
             id: "fees-report",
             label: "Fees Report",
-          href: "#",
+            href: "#",
             icon: BarChart3,
           },
           {
             id: "transport-fee-report",
             label: "Transport Fee Report",
-          href: "#",
+            href: "#",
             icon: Van,
           },
           {
             id: "hostel-fee-report",
             label: "Hostel Fee Report",
-          href: "#",
+            href: "#",
             icon: Building,
           },
           {
@@ -415,7 +415,7 @@ export const menuData: MenuSection[] = [
           {
             id: "hostel-fee-report-class-wise",
             label: "Hostel Fee Report (Class-wise)",
-          href: "#",
+            href: "#",
             icon: Building,
           },
         ],
@@ -424,7 +424,7 @@ export const menuData: MenuSection[] = [
       {
         id: "fees-collection",
         label: "Fees Collection",
-       href: "#",
+        href: "#",
         badge: "3",
         icon: Wallet,
         children: [
@@ -437,7 +437,7 @@ export const menuData: MenuSection[] = [
           {
             id: "collect-hostel-fee",
             label: "Collect Hostel Fees",
-           href: "#",
+            href: "#",
             icon: Building,
           },
           {
@@ -457,14 +457,14 @@ export const menuData: MenuSection[] = [
       {
         id: "class-room",
         label: "Class Room",
-       href: "#",
+        href: "#",
         icon: School,
       },
 
       {
         id: "subject",
         label: "Subject",
-       href: "#",
+        href: "#",
         icon: BookOpen,
       },
 
@@ -478,8 +478,8 @@ export const menuData: MenuSection[] = [
       {
         id: "time-table",
         label: "Time Table",
-         href: "#",
-        icon:  Calendar,
+        href: "#",
+        icon: Calendar,
         badge: "3",
         children: [
           {
@@ -491,13 +491,13 @@ export const menuData: MenuSection[] = [
           {
             id: "teacher-time-table",
             label: "Teacher Time Table",
-           href: "#",
+            href: "#",
             icon: UserRound,
           },
           {
             id: "school-time-table",
             label: "School Time Table",
-             href: "#",
+            href: "#",
             icon: Clock3,
           },
         ],
@@ -506,7 +506,7 @@ export const menuData: MenuSection[] = [
       {
         id: "study-material",
         label: "Study Material",
-      href: "#",
+        href: "#",
         icon: LibraryBig,
       },
 
@@ -527,14 +527,14 @@ export const menuData: MenuSection[] = [
       {
         id: "question-bank",
         label: "Question Bank",
-       href: "#",
+        href: "#",
         icon: FileQuestion,
       },
 
       {
         id: "online-exam",
         label: "Online Exam",
-      href: "#",
+        href: "#",
         icon: MonitorCheck,
       },
     ],
@@ -546,7 +546,7 @@ export const menuData: MenuSection[] = [
       {
         id: "Exam Patterns",
         label: "Exam Patterns",
-     href: "#",
+        href: "#",
         icon: ClipboardList,
       },
       {
@@ -564,20 +564,20 @@ export const menuData: MenuSection[] = [
       {
         id: "library",
         label: "Library",
-         href: "#",
+        href: "#",
         icon: LibraryBig,
         badge: "2",
         children: [
           {
             id: "books",
             label: "Books",
-             href: "#",
+            href: "#",
             icon: BookOpen,
           },
           {
             id: "circulation",
             label: "Circulation (Issues)",
-             href: "#",
+            href: "#",
             icon: Repeat,
           },
         ],
@@ -586,33 +586,33 @@ export const menuData: MenuSection[] = [
       {
         id: "hostel",
         label: "Hostel",
-         href: "#",
+        href: "#",
         icon: Building,
       },
 
       {
         id: "transport",
         label: "Transport",
-         href: "#",
+        href: "#",
         icon: Van,
         badge: "3",
         children: [
           {
             id: "drivers",
             label: "Drivers",
-             href: "#",
+            href: "#",
             icon: UserRound,
           },
           {
             id: "vehicle",
             label: "Vehicle",
-             href: "#",
+            href: "#",
             icon: Bus,
           },
           {
             id: "routes",
             label: "Routes",
-             href: "#",
+            href: "#",
             icon: Route,
           },
         ],
@@ -626,14 +626,14 @@ export const menuData: MenuSection[] = [
       {
         id: "logs-history",
         label: "Logs & History",
-         href: "#",
+        href: "#",
         icon: History,
       },
 
       {
         id: "compose-mail-sms",
         label: "Compose Mail/SMS",
-         href: "#",
+        href: "#",
         icon: Send,
       },
     ],
@@ -645,50 +645,50 @@ export const menuData: MenuSection[] = [
       {
         id: "inventory",
         label: "Inventory",
-         href: "#",
+        href: "#",
         icon: Package,
         badge: "7",
         children: [
           {
             id: "inventory-dashboard",
             label: "Dashboard",
-             href: "#",
+            href: "#",
             icon: LayoutDashboard,
           },
           {
             id: "stock-ledger",
             label: "Stock Ledger",
-             href: "#",
+            href: "#",
             icon: BookOpenText,
           },
           {
             id: "items",
             label: "Items",
-             href: "#",
+            href: "#",
             icon: Boxes,
           },
           {
             id: "categories",
             label: "Categories",
-             href: "#",
+            href: "#",
             icon: Tags,
           },
           {
             id: "vendors",
             label: "Vendors",
-             href: "#",
+            href: "#",
             icon: Store,
           },
           {
             id: "purchases",
             label: "Purchases",
-             href: "#",
+            href: "#",
             icon: ShoppingCart,
           },
           {
             id: "sales",
             label: "Sales",
-             href: "#",
+            href: "#",
             icon: BadgeIndianRupee,
           },
         ],
@@ -703,7 +703,7 @@ export const menuData: MenuSection[] = [
       {
         id: "report",
         label: "Report",
-         href: "#",
+        href: "#",
         icon: FileBarChart,
       },
     ],
@@ -715,7 +715,7 @@ export const menuData: MenuSection[] = [
       {
         id: "e-learning",
         label: "E-Learning",
-         href: "#",
+        href: "#",
         icon: MonitorPlay,
       },
     ],
@@ -727,7 +727,7 @@ export const menuData: MenuSection[] = [
       {
         id: "competitions",
         label: "Competitions",
-         href: "#",
+        href: "#",
         icon: Trophy,
       },
     ],
@@ -739,14 +739,14 @@ export const menuData: MenuSection[] = [
       {
         id: "academic-year-settings",
         label: "Academic Year Settings",
-         href: "#",
+        href: "#",
         icon: CalendarCog,
         badge: "1",
         children: [
           {
             id: "academic-year-setting",
             label: "Academic Year Settings",
-             href: "#",
+            href: "#",
             icon: CalendarCog,
           },
         ],
@@ -755,20 +755,20 @@ export const menuData: MenuSection[] = [
       {
         id: "houses-activities",
         label: "Houses & Activities",
-         href: "#",
+        href: "#",
         icon: Trophy,
         badge: "2",
         children: [
           {
             id: "house",
             label: "House",
-             href: "#",
+            href: "#",
             icon: ShieldCheck,
           },
           {
             id: "additional-activities",
             label: "Additional Activities",
-             href: "#",
+            href: "#",
             icon: Activity,
           },
         ],
@@ -777,14 +777,14 @@ export const menuData: MenuSection[] = [
       {
         id: "school-base-settings",
         label: "School Base Settings",
-         href: "#",
+        href: "#",
         icon: School,
         badge: "1",
         children: [
           {
             id: "general-settings",
             label: "General Settings",
-             href: "#",
+            href: "#",
             icon: Settings,
           },
         ],
@@ -793,14 +793,14 @@ export const menuData: MenuSection[] = [
       {
         id: "roles-permissions",
         label: "Roles & Permissions",
-         href: "#",
+        href: "#",
         icon: ShieldCheck,
         badge: "1",
         children: [
           {
             id: "roles-permissions-management",
             label: "Roles & Permissions",
-             href: "#",
+            href: "#",
             icon: KeyRound,
           },
         ],
@@ -814,21 +814,21 @@ export const menuData: MenuSection[] = [
       {
         id: "student-settings",
         label: "Student Settings",
-         href: "#",
+        href: "#",
         icon: UserRoundCog,
       },
 
       {
         id: "school-admin-roles",
         label: "School Admin Roles",
-         href: "#",
+        href: "#",
         icon: ShieldCheck,
       },
 
       {
         id: "admin-password-reset",
         label: "Admin Password Reset",
-         href: "#",
+        href: "#",
         icon: KeyRound,
       },
     ],

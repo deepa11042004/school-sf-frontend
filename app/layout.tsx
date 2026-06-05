@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeCustomizer } from "@/components/theme-customizer"
-import ElevenLabsWidget from "@/components/ChatBot/ElevenLabsWidget"
+import ElevenLabsWidget from "@/components/chatBot/ElevenLabsWidget"
 
 const inter = Inter({ subsets: ["latin"] })
 
