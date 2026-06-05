@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Layout from "@/components/ SF-Software/layout";
+import Layout from "@/components/cmsfullform/layout"
 import Content from "@/components/plugins/content";
 
 export const metadata: Metadata = {

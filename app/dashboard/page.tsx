@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
 }
 
-export default function DashboardPage() {
+export default function NotFound() {
   return (
     <Layout>
       <Content />

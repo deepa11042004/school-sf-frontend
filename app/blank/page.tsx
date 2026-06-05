@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Layout from "@/components/ SF-Software/layout";
+import Layout from "@/components/cmsfullform/layout"
 import { BlankContent } from "@/components/blank";
 
 export const metadata: Metadata = {
@@ -7,10 +7,11 @@ export const metadata: Metadata = {
   description: " SF-Software dashboard build with Next.js and Tailwind CSS",
 };
 
-export default function BlankPage() {
+export default function page() {
   return (
     <Layout>
       <BlankContent />
     </Layout>
   );
 }
+ 

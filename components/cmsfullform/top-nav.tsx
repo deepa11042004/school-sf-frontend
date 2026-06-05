@@ -9,6 +9,7 @@ import {
   User,
   ChevronDown,
   Home,
+  LogOut 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -173,7 +174,10 @@ export default function TopNav() {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600">
-              Sign out
+              <Link href="/auth/login" className="flex items-center">
+                <LogOut className="mr-2 h-4 w-4" />
+               Sign out
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

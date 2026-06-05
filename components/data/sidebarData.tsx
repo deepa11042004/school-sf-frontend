@@ -144,7 +144,7 @@ export const menuData: MenuSection[] = [
       {
         id: "dashboard",
         label: "Dashboard",
-         href: "/",
+         href: "/dashboard",
         icon: Home,
       },
     ],
@@ -163,7 +163,7 @@ export const menuData: MenuSection[] = [
           {
             id: "visitors-log",
             label: "Visitors Log",
-          href: "/test",
+          href: "/blank",
             icon: History,
           },
           {
