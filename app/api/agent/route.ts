@@ -1,4 +1,5 @@
 // app/api/agent/route.ts
+//only for agent
 import { NextResponse } from 'next/server';
 
 export async function GET() {
