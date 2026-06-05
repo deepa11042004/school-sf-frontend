@@ -278,9 +278,7 @@ export default function Sidebar() {
             {/* Header */}
             <div className="h-16 px-3 flex items-center border-b border-gray-200 dark:border-[#1F1F23]">
               <Link
-                href="https://cmsfullform.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+              href="/dashboard" 
                 className="flex items-center gap-3 w-full"
               >
                 <img
@@ -358,9 +356,7 @@ export default function Sidebar() {
           <div className="h-16 px-3 flex items-center border-b border-gray-200 dark:border-[#1F1F23]">
             {showText ? (
               <Link
-                href="https://cmsfullform.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/dashboard"
                 className="flex items-center gap-3 w-full"
               >
                 <img
