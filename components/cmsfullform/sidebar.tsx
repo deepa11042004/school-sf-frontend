@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Settings, HelpCircle, ChevronDown, LucideIcon } from "lucide-react";
+import { ChevronDown, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -158,7 +158,7 @@ export default function Sidebar() {
         className={cn(
           "flex items-center py-2 text-sm rounded-md transition-colors sidebar-menu-item relative group cursor-pointer",
           isActive
-            ? "bg-gray-200 dark:bg-[#2A2A30] text-gray-900 dark:text-white"
+            ? "bg-gray-300 dark:bg-[#2A2A30] text-gray-900 dark:text-white"
             : "hover:bg-gray-50 dark:hover:bg-[#1F1F23]",
           paddingLeft,
         )}

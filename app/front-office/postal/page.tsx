@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Layout from "@/components/cmsfullform/layout"
-import HalfDayNotices from "@/components/front-office/halfdaynotices";
+import Postal from "@/components/front-office/Postal";
 export const metadata: Metadata = {
   title: " SF-Software Dashboard - OpenSource CMS",
   description: " SF-Software dashboard build with Next.js and Tailwind CSS",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <Layout>
-      <HalfDayNotices />
+      <Postal />
     </Layout>
   );
 }

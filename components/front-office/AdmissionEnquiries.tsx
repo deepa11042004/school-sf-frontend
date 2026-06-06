@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input"; 
 import {
   Table,
   TableBody,
@@ -20,92 +20,82 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Printer,
+  Search,
   Plus,
   CalendarIcon,
   Filter,
   ChevronLeft,
   ChevronRight,
   FileText,
-  Sheet,
-Search
 } from "lucide-react";
 import { format } from "date-fns";
-import { generateHalfDayNotices } from "@/components/data/hafday";
+import AdmisionStats from "./AdmisionStats";
+import {
+  admissionEnquiriesDummyData,
+  type AdmissionEnquiry,
+} from "@/components/data/admission-enquiries";
 
-interface HalfDayNotice {
-  id: string;
-  studentName: string;
-  studentId: string;
-  className: string;
-  outTime: Date;
-  reason: string;
-  guardianName: string;
-  guardianContact: string;
+interface AdmissionEnquiriesProps {
+  enquiries?: AdmissionEnquiry[];
+  onAddEnquiry?: () => void;
+  onEditEnquiry?: (id: string) => void;
 }
 
-interface HalfDayNoticesProps {
-  notices?: HalfDayNotice[];
-  onAddNotice?: () => void;
-  onEditNotice?: (id: string) => void;
-  onPrintList?: () => void;
-  isLoading?: boolean;
-}
-
-const dummyNotices = generateHalfDayNotices(20);
-
-export default function HalfDayNotices({
-  notices = dummyNotices,
-  onAddNotice,
-  onEditNotice,  
-  isLoading = false,
-}: HalfDayNoticesProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
-  );
+export default function AdmissionEnquiries({
+  enquiries = admissionEnquiriesDummyData,
+  onAddEnquiry,
+  onEditEnquiry,
+}: AdmissionEnquiriesProps) {
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedClass, setSelectedClass] = useState("all");
+  const [selectedSource, setSelectedSource] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
-  const [dummyNotices] = useState(() => generateHalfDayNotices(20));
-  const [openPrintDialog, setOpenPrintDialog] = useState(false);
-  const data = notices.length ? notices : dummyNotices;
 
-  // Filter notices based on date and class
-  const filteredNotices = data.filter((notice) => {
+  // Filter enquiries based on search, date, source, and status
+  const filteredEnquiries = enquiries.filter((enquiry) => {
+    const matchesSearch =
+      enquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      enquiry.phone.includes(searchTerm);
+
     const matchesDate =
       !selectedDate ||
-      format(notice.outTime, "yyyy-MM-dd") ===
+      format(enquiry.enquiryDate, "yyyy-MM-dd") ===
         format(selectedDate, "yyyy-MM-dd");
-    const matchesClass =
-      selectedClass === "all" ||
-      notice.className.toLowerCase() === selectedClass.toLowerCase();
-    return matchesDate && matchesClass;
+
+    const matchesSource =
+      selectedSource === "all" ||
+      enquiry.source.toLowerCase() === selectedSource.toLowerCase();
+
+    const matchesStatus =
+      selectedStatus === "all" ||
+      enquiry.status.toLowerCase() === selectedStatus.toLowerCase();
+
+    return matchesSearch && matchesDate && matchesSource && matchesStatus;
   });
 
   // Pagination logic
   const totalPages = Math.ceil(
-    filteredNotices.length / parseInt(entriesPerPage),
+    filteredEnquiries.length / parseInt(entriesPerPage),
   );
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentNotices = filteredNotices.slice(startIndex, endIndex);
+  const currentEnquiries = filteredEnquiries.slice(startIndex, endIndex);
 
-  const handleClassChange = (value: string) => {
-    setSelectedClass(value);
+  const handleSourceChange = (value: string) => {
+    setSelectedSource(value);
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value);
     setCurrentPage(1);
   };
 
@@ -118,14 +108,16 @@ export default function HalfDayNotices({
     setSelectedDate(date);
     setCurrentPage(1);
   };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-
   const clearFilters = () => {
-    setSelectedDate(new Date());
-    setSelectedClass("all");
+    setSearchTerm("");
+    setSelectedDate(undefined);
+    setSelectedSource("all");
+    setSelectedStatus("all");
     setCurrentPage(1);
   };
 
@@ -165,179 +157,129 @@ export default function HalfDayNotices({
     return pages;
   };
 
-  const hasActiveFilters = selectedClass !== "all";
+  const hasActiveFilters = selectedSource !== "all" || selectedStatus !== "all";
 
   return (
-    <div className="min-h-screen   p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Half Day Notices
+              Admission Enquiries
             </h1>
           </div>
           <div className="flex gap-3">
             <Button
-              variant="outline"
-              onClick={() => setOpenPrintDialog(true)}
-              className="border-0 hover:bg-gray-300 dark:hover:bg-neutral-900"
+              variant="secondary"
+              className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
+              onClick={clearFilters}
             >
-              <Printer className="mr-2 h-4 w-4" />
-              Print List
+              <Filter className="mr-2 h-4 w-4" />
+              {hasActiveFilters ? "Clear Filters" : "Filter"}
             </Button>
 
-            <Button
-              onClick={onAddNotice}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
-            >
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
-              Add Notice
+              New Enquiry
             </Button>
           </div>
         </div>
 
-        <Dialog open={openPrintDialog} onOpenChange={setOpenPrintDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Choose which format you want to use</DialogTitle>
-            </DialogHeader>
-
-            <div className="grid gap-4 mt-4">
-              {/* PDF */}
-              <div className="flex items-center justify-between border rounded-lg p-4">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-10 w-10 text-red-500" />
-                  <div>
-                    <p className="font-medium">PDF Format</p>
-                    <p className="text-sm text-muted-foreground">
-                      Export as PDF document
-                    </p>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => {
-                    console.log("Generate PDF");
-                    setOpenPrintDialog(false);
-                  }}
-                >
-                  Select
-                </Button>
-              </div>
-
-              {/* Excel */}
-              <div className="flex items-center justify-between border rounded-lg p-4">
-                <div className="flex items-center gap-3">
-                  <Sheet className="h-10 w-10 text-green-600" />
-                  <div>
-                    <p className="font-medium">Excel Format</p>
-                    <p className="text-sm text-muted-foreground">
-                      Export as XLSX file
-                    </p>
-                  </div>
-                </div>
-
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    console.log("Generate Excel");
-                    setOpenPrintDialog(false);
-                  }}
-                >
-                  Select
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        {/* admision stats from diffent file */}
+        <AdmisionStats />
 
         {/* Filter Section */}
-        <Card className="shadow-sm  ">
+        <Card className="shadow-sm">
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-
               {/* Search Input */}
               <div className="relative w-full lg:w-96">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="text"
-                  placeholder="Search Name or Phone..."
+                  placeholder="Search by Name or Phone..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="pl-10   focus-visible:ring-indigo-500"
+                  className="pl-10 focus-visible:ring-indigo-500"
                 />
               </div>
 
-
-              
-
-              {/* Filters +  Date Picker */}
+              {/* Filters + Date Picker */}
               <div className="flex flex-wrap w-full lg:w-auto gap-3">
-
                 {/* Date Picker */}
-              <div className="w-full lg:w-auto">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full lg:w-auto justify-start text-left font-normal  "
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-slate-500" />
-                      {selectedDate
-                        ? format(selectedDate, "MM/dd/yyyy")
-                        : "mm/dd/yyyy"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={handleDateChange}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+                <div className="w-full lg:w-auto">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full lg:w-auto justify-start text-left font-normal"
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 text-slate-500" />
+                        {selectedDate
+                          ? format(selectedDate, "MM/dd/yyyy")
+                          : "mm/dd/yyyy"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={handleDateChange}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
 
-                <Select value={selectedClass} onValueChange={handleClassChange}>
-                  <SelectTrigger className="w-full lg:w-[180px]  ">
-                    <SelectValue placeholder="All Classes" />
+                <Select
+                  value={selectedSource}
+                  onValueChange={handleSourceChange}
+                >
+                  <SelectTrigger className="w-full lg:w-[180px]">
+                    <SelectValue placeholder="All Sources" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Classes</SelectItem>
-                    <SelectItem value="class-1">Class 1</SelectItem>
-                    <SelectItem value="class-2">Class 2</SelectItem>
-                    <SelectItem value="class-3">Class 3</SelectItem>
-                    <SelectItem value="class-4">Class 4</SelectItem>
-                    <SelectItem value="class-5">Class 5</SelectItem>
+                    <SelectItem value="all">All Sources</SelectItem>
+                    <SelectItem value="website">Website</SelectItem>
+                    <SelectItem value="walk-in">Walk-in</SelectItem>
+                    <SelectItem value="phone call">Phone Call</SelectItem>
+                    <SelectItem value="referral">Referral</SelectItem>
+                    <SelectItem value="social media">Social Media</SelectItem>
                   </SelectContent>
                 </Select>
 
-                <Button
-                  variant="secondary"
-                  className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
-                  onClick={clearFilters}
+                <Select
+                  value={selectedStatus}
+                  onValueChange={handleStatusChange}
                 >
-                  <Filter className="mr-2 h-4 w-4" />
-                  {hasActiveFilters ? "Clear Filters" : "Filter"}
-                </Button>
+                  <SelectTrigger className="w-full lg:w-[180px]">
+                    <SelectValue placeholder="All Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="follow-up">Follow-up</SelectItem>
+                    <SelectItem value="converted">Converted</SelectItem>
+                    <SelectItem value="lost">Lost</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Table Section */}
-        <Card className="shadow-sm ">
+        <Card className="shadow-sm">
           <CardContent className="p-0">
             {/* Table Controls (Show entries) */}
             <div className="p-4 md:p-6 bg-white flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-sm  ">
+              <div className="flex items-center gap-2 text-sm">
                 <span>Show</span>
                 <Select
                   value={entriesPerPage}
                   onValueChange={handleEntriesPerPageChange}
                 >
-                  <SelectTrigger className="w-[70px] h-8 bg-white  ">
+                  <SelectTrigger className="w-[70px] h-8 bg-white">
                     <SelectValue placeholder="10" />
                   </SelectTrigger>
                   <SelectContent>
@@ -350,9 +292,9 @@ export default function HalfDayNotices({
                 <span>entries</span>
               </div>
               <div className="text-sm text-slate-600">
-                Showing {filteredNotices.length === 0 ? 0 : startIndex + 1} to{" "}
-                {Math.min(endIndex, filteredNotices.length)} of{" "}
-                {filteredNotices.length} entries
+                Showing {filteredEnquiries.length === 0 ? 0 : startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredEnquiries.length)} of{" "}
+                {filteredEnquiries.length} entries
               </div>
             </div>
 
@@ -360,99 +302,118 @@ export default function HalfDayNotices({
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      #
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Student Details
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Class
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Out Time
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500  uppercase tracking-wider py-3">
-                      Reason
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Guardian
+                      Name
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Phone
                     </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Source
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Enquiry Date
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Last Follow Up
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Next Follow Up
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Status
+                    </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
-                      Action
+                      Actions
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {isLoading ? (
+                  {currentEnquiries.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="h-64 text-center">
-                        <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ) : currentNotices.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-64 text-center">
+                      <TableCell colSpan={8} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
                           <div className="p-3 rounded-full bg-slate-100">
                             <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            No half day notices found for this date.
+                            No enquiries found.
                           </p>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentNotices.map((notice, index) => (
+                    currentEnquiries.map((enquiry) => (
                       <TableRow
-                        key={notice.id}
-                        className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
+                        key={enquiry.id}
+                        className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
-                        <TableCell className="py-3 text-slate-600">
-                          {startIndex + index + 1}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <div className="flex flex-col">
-                            <span className="font-medium  ">
-                              {notice.studentName}
-                            </span>
-                            <span className="text-sm text-slate-500">
-                              ID: {notice.studentId}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                            {notice.className}
+                        <TableCell className="py-3 font-medium">
+                          {enquiry.name}
+                          <span className="flex items-center gap-1 mt-2 text-slate-500">
+                            {enquiry.className}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3  ">
-                          {format(notice.outTime, "hh:mm a")}
+                        <TableCell className="py-3 max-w-xs truncate">
+                          {enquiry.phone}
                         </TableCell>
-
-                        <TableCell className="py-3 max-w-36 truncate  ">
-                          {notice.reason}
-                        </TableCell>
-
                         <TableCell className="py-3">
-                          {notice.guardianName}
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
+                              enquiry.source === "website"
+                                ? "bg-blue-100 text-blue-800"
+                                : enquiry.source === "walk-in"
+                                  ? "bg-green-100 text-green-800"
+                                  : enquiry.source === "phone call"
+                                    ? "bg-purple-100 text-purple-800"
+                                    : enquiry.source === "referral"
+                                      ? "bg-orange-100 text-orange-800"
+                                      : "bg-pink-100 text-pink-800"
+                            }`}
+                          >
+                            {enquiry.source}
+                          </span>
                         </TableCell>
-                        <TableCell className="text-sm  ">
-                          {notice.guardianContact}
+                        <TableCell className="py-3">
+                          {format(
+                            new Date(enquiry.enquiryDate),
+                            "MMM dd, yyyy",
+                          )}
                         </TableCell>
-                        <TableCell className="text-right py-3 ">
+                        <TableCell className="py-3">
+                          {format(
+                            new Date(enquiry.lastFollowUp),
+                            "MMM dd, yyyy",
+                          )}
+                        </TableCell>
+                        <TableCell className="py-3">
+                          {format(
+                            new Date(enquiry.nextFollowUp),
+                            "MMM dd, yyyy",
+                          )}
+                        </TableCell>
+                        <TableCell className="py-3">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
+                              enquiry.status === "converted"
+                                ? "bg-green-100 text-green-800"
+                                : enquiry.status === "new"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : enquiry.status === "follow-up"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {enquiry.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right py-3">
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="border border-black/20  dark:border-white/20"
-                            onClick={() => onEditNotice?.(notice.id)}
+                            className="border border-black/20 dark:border-white/20"
+                            onClick={() => onEditEnquiry?.(enquiry.id)}
                           >
                             Edit
                           </Button>
@@ -467,7 +428,7 @@ export default function HalfDayNotices({
             {/* Pagination */}
             {totalPages > 0 && (
               <div className="p-4 sm:p-6 border-t border-slate-100">
-                <div className="flex items-center justify-cener">
+                <div className="flex items-center justify-center">
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"

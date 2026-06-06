@@ -22,11 +22,11 @@ const indianPhone = () => {
   const firstPart = faker.string.numeric(5);
   const secondPart = faker.string.numeric(5);
 
-  return `(+91) ${firstPart} ${secondPart}`;
+  return `+91 ${firstPart} ${secondPart}`;
 };
 
 export const dummyVisitors: Visitor[] = Array.from(
-  { length: 15 },
+  { length: 20 },
   (_, index) => ({
     id: faker.string.uuid(),
     name: faker.person.fullName(),

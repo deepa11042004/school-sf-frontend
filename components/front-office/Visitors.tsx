@@ -201,7 +201,7 @@ export default function VisitorsLog() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className=" border-b border-slate-200">
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Visitor Name
                     </TableHead>
@@ -246,7 +246,7 @@ export default function VisitorsLog() {
                     currentVisitors.map((visitor) => (
                       <TableRow
                         key={visitor.id}
-                        className="border-b dark:border-white/20 border-black/20 last:border-b-0 hover:bg-slate-50/50 transition-colors"
+                        className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
                         <TableCell className="font-medium py-3">
                           {visitor.name}
@@ -277,7 +277,7 @@ export default function VisitorsLog() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="border border-white/20"
+                            className="border border-black/20  dark:border-white/20"
                           >
                             Edit
                           </Button>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";  
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -19,73 +19,75 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Search, Filter, Plus, AlertCircle, ChevronLeft, ChevronRight, CalendarIcon } from "lucide-react";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { postalDummyData, type PostalRecord } from "@/components/data/postal";
+import {
+  Printer,
+  Plus,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Sheet,
+  Search,
+} from "lucide-react";
 import { format } from "date-fns";
 
-// [CHANGE 1]: Fixed the import to match the exported name 'dummyCalls'
-import { dummyCalls } from "@/components/data/dummyCalls"; 
-
-interface CallLog {
-  id: string;
-  name: string;
-  phone: string;
-  date: Date;
-  nextFollowUp: Date;
-  callType: string;
-  description: string;
-}
-
-interface CallsLogProps {
-  calls?: CallLog[];
-  onAddCall?: () => void;
-  onEditCall?: (id: string) => void;
+interface PostalProps {
+  notices?: PostalRecord[];
+  onAddNotice?: () => void;
+  onEditNotice?: (id: string) => void;
+  onPrintList?: () => void;
   isLoading?: boolean;
 }
-
-export default function PhoneCalls({ 
-  
-  calls = dummyCalls, 
-  onAddCall, 
-  onEditCall,
-  isLoading = false 
-}: CallsLogProps) {
+export default function Postal({
+  notices = postalDummyData,
+  onAddNotice,
+  onEditNotice,
+  isLoading = false,
+}: PostalProps) {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [callType, setCallType] = useState("all");
-  const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
+  const [selectedClass, setSelectedClass] = useState("all");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter calls based on search, call type, and date
-  const filteredCalls = calls.filter((call) => {
+  const [openPrintDialog, setOpenPrintDialog] = useState(false);
+  const data = notices.length ? notices : postalDummyData;
+
+  // Filter notices based on date and class
+  const filteredNotices = data.filter((notice) => {
     const matchesSearch =
-      call.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      call.phone.includes(searchTerm);
-    const matchesCallType = callType === "all" || call.callType.toLowerCase() === callType.toLowerCase();
-    const matchesDate = !dateFilter || format(call.date, "yyyy-MM-dd") === format(dateFilter, "yyyy-MM-dd");
-    return matchesSearch && matchesCallType && matchesDate;
+      notice.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notice.referenceNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notice.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesDirection =
+      selectedClass === "all" || notice.direction === selectedClass;
+
+    const matchesDate =
+      !selectedDate ||
+      format(notice.date, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
+
+    return matchesSearch && matchesDirection && matchesDate;
   });
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredCalls.length / parseInt(entriesPerPage));
+  const totalPages = Math.ceil(
+    filteredNotices.length / parseInt(entriesPerPage),
+  );
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentCalls = filteredCalls.slice(startIndex, endIndex);
+  const currentNotices = filteredNotices.slice(startIndex, endIndex);
 
-  // Reset to page 1 when filters change
-  const handleFilterChange = (value: string) => {
-    setCallType(value);
-    setCurrentPage(1);
-  };
-
-  const handleEntriesPerPageChange = (value: string) => {
-    setEntriesPerPage(value);
+  const handleClassChange = (value: string) => {
+    setSelectedClass(value);
     setCurrentPage(1);
   };
 
@@ -94,15 +96,9 @@ export default function PhoneCalls({
     setCurrentPage(1);
   };
 
-  const handleDateFilterChange = (date: Date | undefined) => {
-    setDateFilter(date);
-    setCurrentPage(1);
-  };
-
   const clearFilters = () => {
-    setSearchTerm("");
-    setCallType("all");
-    setDateFilter(undefined);
+    setSelectedDate(new Date());
+    setSelectedClass("all");
     setCurrentPage(1);
   };
 
@@ -142,7 +138,7 @@ export default function PhoneCalls({
     return pages;
   };
 
-  const hasActiveFilters = searchTerm || callType !== "all" || dateFilter;
+  const hasActiveFilters = selectedClass !== "all";
 
   return (
     <div className="min-h-screen   p-4 md:p-6 lg:p-8">
@@ -150,21 +146,86 @@ export default function PhoneCalls({
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold  tracking-tight">
-              Calls Log
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Postal Dispatch/Receive
             </h1>
-            
           </div>
-          <Button 
-            onClick={onAddCall}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Call
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setOpenPrintDialog(true)}
+              className="border-0 hover:bg-gray-300 dark:hover:bg-neutral-900"
+            >
+              <Printer className="mr-2 h-4 w-4" />
+              Print List
+            </Button>
+
+            <Button
+              onClick={onAddNotice}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Notice
+            </Button>
+          </div>
         </div>
 
-        {/* Search and Filter Section */}
+        <Dialog open={openPrintDialog} onOpenChange={setOpenPrintDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Choose which format you want to use</DialogTitle>
+            </DialogHeader>
+
+            <div className="grid gap-4 mt-4">
+              {/* PDF */}
+              <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center gap-3">
+                  <FileText className="h-10 w-10 text-red-500" />
+                  <div>
+                    <p className="font-medium">PDF Format</p>
+                    <p className="text-sm text-muted-foreground">
+                      Export as PDF document
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => {
+                    console.log("Generate PDF");
+                    setOpenPrintDialog(false);
+                  }}
+                >
+                  Select
+                </Button>
+              </div>
+
+              {/* Excel */}
+              <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center gap-3">
+                  <Sheet className="h-10 w-10 text-green-600" />
+                  <div>
+                    <p className="font-medium">Excel Format</p>
+                    <p className="text-sm text-muted-foreground">
+                      Export as XLSX file
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    console.log("Generate Excel");
+                    setOpenPrintDialog(false);
+                  }}
+                >
+                  Select
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Filter Section */}
         <Card className="shadow-sm  ">
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
@@ -173,51 +234,28 @@ export default function PhoneCalls({
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="text"
-                  placeholder="Search Name or Phone..."
+                  placeholder="Search Type or Ref No..."
                   value={searchTerm}
                   onChange={handleSearchChange}
                   className="pl-10   focus-visible:ring-indigo-500"
                 />
               </div>
 
-              {/* Filters */}
+              {/* Filters +  Date Picker */}
               <div className="flex flex-wrap w-full lg:w-auto gap-3">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full lg:w-auto justify-start text-left font-normal  "
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateFilter ? format(dateFilter, "MM/dd/yyyy") : "mm/dd/yyyy"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={dateFilter}
-                      onSelect={handleDateFilterChange}
-                      
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                <Select value={callType} onValueChange={handleFilterChange}>
+                <Select value={selectedClass} onValueChange={handleClassChange}>
                   <SelectTrigger className="w-full lg:w-[180px]  ">
-                    <SelectValue placeholder="All Call Types" />
+                    <SelectValue placeholder="All Directions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Call Types</SelectItem> 
-                    <SelectItem value="followup">Follow Up</SelectItem>
-                    <SelectItem value="new">New Inquiry</SelectItem>
-                    <SelectItem value="complaint">Complaint</SelectItem>
-                    <SelectItem value="feedback">Feedback</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="all">All Directions</SelectItem>
+                    <SelectItem value="dispatch">Dispatch</SelectItem>
+                    <SelectItem value="receive">Receive</SelectItem>
                   </SelectContent>
                 </Select>
 
-                <Button 
-                  variant="secondary" 
+                <Button
+                  variant="secondary"
                   className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
                   onClick={clearFilters}
                 >
@@ -230,55 +268,35 @@ export default function PhoneCalls({
         </Card>
 
         {/* Table Section */}
-        <Card className="shadow-sm  ">
+        <Card className="shadow-sm ">
           <CardContent className="p-0">
-            {/* Table Controls (Show entries) */}
-           <div className="p-4 md:p-6  flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-sm ">
-                <span>Show</span>
-                <Select value={entriesPerPage} onValueChange={handleEntriesPerPageChange}>
-                  <SelectTrigger className="w-[70px] h-8 ">
-                    <SelectValue placeholder="10" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="25">25</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                    <SelectItem value="100">100</SelectItem>
-                  </SelectContent>
-                </Select>
-                <span>entries</span>
-              </div>
-              <div className="text-sm text-slate-600">
-                Showing {filteredCalls.length === 0 ? 0 : startIndex + 1} to {Math.min(endIndex, filteredCalls.length)} of {filteredCalls.length} entries
-              </div>
-            </div>
-
             {/* Data Table */}
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Name
+                      Type
                     </TableHead>
+
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Phone
+                      Reference No
                     </TableHead>
+
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Title
+                    </TableHead>
+
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Direction
+                    </TableHead>
+
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Date
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Next Follow Up
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Call Type
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Description
-                    </TableHead>
+
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
-                      Action
+                      Actions
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -291,63 +309,55 @@ export default function PhoneCalls({
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : currentCalls.length === 0 ? (
+                  ) : currentNotices.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
-                          <div className="p-3 rounded-full bg-red-50">
-                            <AlertCircle className="h-6 w-6 text-red-500" />
+                          <div className="p-3 rounded-full bg-slate-100">
+                            <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            {hasActiveFilters ? "No calls found matching your filters" : "No calls found"}
+                            No half day notices found for this date.
                           </p>
-                          {hasActiveFilters && (
-                            <Button 
-                              variant="link" 
-                              onClick={clearFilters}
-                              className="text-indigo-600 hover:text-indigo-700"
-                            >
-                              Clear all filters
-                            </Button>
-                          )}
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentCalls.map((call) => (
+                    currentNotices.map((notice, index) => (
                       <TableRow
-                        key={call.id}
-                         className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
+                        key={notice.id}
+                        className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
-                        <TableCell className="font-medium py-3">
-                          {call.name}
-                        </TableCell>
-                        <TableCell className="py-3">{call.phone}</TableCell>
-                        <TableCell className="py-3">
-                          {format(call.date, "MMM dd, yyyy")}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          {format(call.nextFollowUp, "MMM dd, yyyy")}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                            ${call.callType.toLowerCase() === 'followup' ? 'bg-blue-100 text-blue-800' : 
-                              call.callType.toLowerCase() === 'new' ? 'bg-green-100 text-green-800' :
-                              call.callType.toLowerCase() === 'complaint' ? 'bg-red-100 text-red-800' :
-                              call.callType.toLowerCase() === 'feedback' ? 'bg-purple-100 text-purple-800' :
-                              'bg-gray-100 text-gray-800'}`}>
-                            {call.callType}
+                        <TableCell>{notice.type}</TableCell>
+
+                        <TableCell>REF-{notice.referenceNo}</TableCell>
+
+                        <TableCell className="py-3 max-w-xs truncate">{notice.title}</TableCell>
+
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              notice.direction === "dispatch"
+                                ? "bg-indigo-100 text-indigo-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {notice.direction}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3 max-w-10 truncate" title={call.description}>
-                          {call.description}
+
+                        <TableCell className="py-3">
+                          {notice.date
+                            ? format(new Date(notice.date), "MMM dd, yyyy")
+                            : "-"}
                         </TableCell>
-                        <TableCell className="text-right py-3 ">
-                          <Button 
-                            variant="ghost" 
+
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
                             size="sm"
-                            className="border border-black/20  dark:border-white/20"
-                            onClick={() => onEditCall?.(call.id)}
+                            className="border border-black/20 dark:border-white/20"
+                            onClick={() => onEditNotice?.(notice.id)}
                           >
                             Edit
                           </Button>

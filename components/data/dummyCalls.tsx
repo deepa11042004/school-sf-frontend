@@ -26,7 +26,7 @@ const indianPhone = () => {
 };
 
 export const dummyCalls: CallLog[] = Array.from(
-  { length: 50 },
+  { length: 20 },
   () => ({
     id: faker.string.uuid(),
 

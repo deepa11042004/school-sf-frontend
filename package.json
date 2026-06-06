@@ -16,12 +16,10 @@
     "start": "next start"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@faker-js/faker": "^10.4.0",
-=======
->>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "latest",
+    "@radix-ui/react-dialog": "^1.1.16",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-label": "latest",
     "@radix-ui/react-popover": "^1.1.15",
