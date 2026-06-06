@@ -201,7 +201,11 @@ export default function VisitorsLog() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
+<<<<<<< HEAD
                   <TableRow className=" border-b border-slate-200">
+=======
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10 border-b border-slate-200">
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Visitor Name
                     </TableHead>
@@ -211,8 +215,13 @@ export default function VisitorsLog() {
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Purpose
                     </TableHead>
+<<<<<<< HEAD
                     <TableHead className="text-xs font-semibold  text-slate-500 uppercase tracking-wider py-3">
                       No. of <br /> Persons
+=======
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      No. of Persons
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Date
@@ -257,15 +266,22 @@ export default function VisitorsLog() {
                             {visitor.purpose}
                           </span>
                         </TableCell>
+<<<<<<< HEAD
                         <TableCell className="py-3 max-w-3 items-center justify-center text-center truncate">
                           {visitor.persons}
                         </TableCell>
 
+=======
+                        <TableCell className="py-3">
+                          {visitor.persons}
+                        </TableCell>
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                         <TableCell className="py-3">
                           {visitor.date
                             ? format(new Date(visitor.date), "MMM dd, yyyy")
                             : "-"}
                         </TableCell>
+<<<<<<< HEAD
 
                         
 
@@ -279,6 +295,14 @@ export default function VisitorsLog() {
                             size="sm"
                             className="border border-white/20"
                           >
+=======
+                        <TableCell className="py-3">{visitor.inTime}</TableCell>
+                        <TableCell className="py-3">
+                          {visitor.outTime}
+                        </TableCell>
+                        <TableCell className="text-right py-3">
+                          <Button variant="ghost" size="sm">
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                             Edit
                           </Button>
                         </TableCell>
@@ -329,7 +353,11 @@ export default function VisitorsLog() {
                             className={`h-8 w-8 p-0 ${
                               currentPage === page
                                 ? "bg-indigo-600 text-white hover:bg-indigo-700"
+<<<<<<< HEAD
                                 : "hover:bg-slate-100/20"
+=======
+                                 : "hover:bg-slate-100/20"
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                             }`}
                           >
                             {page}

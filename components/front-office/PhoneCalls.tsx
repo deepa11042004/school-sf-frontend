@@ -339,6 +339,7 @@ export default function PhoneCalls({
                             {call.callType}
                           </span>
                         </TableCell>
+<<<<<<< HEAD
                         <TableCell className="py-3 max-w-10 truncate" title={call.description}>
                           {call.description}
                         </TableCell>
@@ -347,6 +348,15 @@ export default function PhoneCalls({
                             variant="ghost" 
                             size="sm"
                             className="border border-white/20"
+=======
+                        <TableCell className="py-3 max-w-xs truncate" title={call.description}>
+                          {call.description}
+                        </TableCell>
+                        <TableCell className="text-right py-3">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+>>>>>>> b8766311c17f412fb1d1d184f814b2a2ae32e961
                             onClick={() => onEditCall?.(call.id)}
                           >
                             Edit
