@@ -20,6 +20,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -58,6 +67,12 @@ export default function AdmissionEnquiries({
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
+
+  const activeFilterCount =
+    (selectedSource !== "all" ? 1 : 0) + (selectedStatus !== "all" ? 1 : 0);
+
+  const hasActiveFilters = activeFilterCount > 0;
 
   // Filter enquiries based on search, date, source, and status
   const filteredEnquiries = enquiries.filter((enquiry) => {
@@ -157,8 +172,6 @@ export default function AdmissionEnquiries({
     return pages;
   };
 
-  const hasActiveFilters = selectedSource !== "all" || selectedStatus !== "all";
-
   return (
     <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -170,15 +183,6 @@ export default function AdmissionEnquiries({
             </h1>
           </div>
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
-              onClick={clearFilters}
-            >
-              <Filter className="mr-2 h-4 w-4" />
-              {hasActiveFilters ? "Clear Filters" : "Filter"}
-            </Button>
-
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
               New Enquiry
@@ -188,6 +192,85 @@ export default function AdmissionEnquiries({
 
         {/* admision stats from diffent file */}
         <AdmisionStats />
+
+        {/* filter pop up dialog  */}
+        <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Filter Enquiries</DialogTitle>
+
+              <DialogDescription>
+                Apply filters to narrow down enquiry records.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
+              {/* Source */}
+              <div className="space-y-2">
+                <Label>Source</Label>
+
+                <Select
+                  value={selectedSource}
+                  onValueChange={setSelectedSource}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Sources" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="all">All Sources</SelectItem>
+
+                    <SelectItem value="website">Website</SelectItem>
+
+                    <SelectItem value="walk-in">Walk-in</SelectItem>
+
+                    <SelectItem value="phone-call">Phone Call</SelectItem>
+
+                    <SelectItem value="referral">Referral</SelectItem>
+
+                    <SelectItem value="social-media">Social Media</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Status */}
+              <div className="space-y-2">
+                <Label>Status</Label>
+
+                <Select
+                  value={selectedStatus}
+                  onValueChange={setSelectedStatus}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Status" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+
+                    <SelectItem value="new">New</SelectItem>
+
+                    <SelectItem value="follow-up">Follow-up</SelectItem>
+
+                    <SelectItem value="converted">Converted</SelectItem>
+
+                    <SelectItem value="lost">Lost</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+
+              <Button onClick={() => setOpenFilterDialog(false)}>
+                Apply Filters
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Filter Section */}
         <Card className="shadow-sm">
@@ -231,38 +314,18 @@ export default function AdmissionEnquiries({
                   </Popover>
                 </div>
 
-                <Select
-                  value={selectedSource}
-                  onValueChange={handleSourceChange}
+                <Button
+                  variant="outline"
+                  onClick={() => setOpenFilterDialog(true)}
                 >
-                  <SelectTrigger className="w-full lg:w-[180px]">
-                    <SelectValue placeholder="All Sources" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Sources</SelectItem>
-                    <SelectItem value="website">Website</SelectItem>
-                    <SelectItem value="walk-in">Walk-in</SelectItem>
-                    <SelectItem value="phone call">Phone Call</SelectItem>
-                    <SelectItem value="referral">Referral</SelectItem>
-                    <SelectItem value="social media">Social Media</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedStatus}
-                  onValueChange={handleStatusChange}
-                >
-                  <SelectTrigger className="w-full lg:w-[180px]">
-                    <SelectValue placeholder="All Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="new">New</SelectItem>
-                    <SelectItem value="follow-up">Follow-up</SelectItem>
-                    <SelectItem value="converted">Converted</SelectItem>
-                    <SelectItem value="lost">Lost</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <Filter className="mr-2 h-4 w-4" />
+                  Filters
+                  {hasActiveFilters && (
+                    <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 py-0.5 text-xs font-medium">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </Button>
               </div>
             </div>
           </CardContent>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,101 +20,116 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-
-import { Label } from "@/components/ui/label";
-import {
-  Printer,
+  Search,
   Plus,
-  CalendarIcon,
   Filter,
   ChevronLeft,
   ChevronRight,
   FileText,
+  Upload,
   Sheet,
-  Search,
+  FileSpreadsheet,
+  User,
+  Phone,
+  GraduationCap,
 } from "lucide-react";
-import { format } from "date-fns";
-import { generateHalfDayNotices } from "@/components/data/hafday";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { dummyGuardians, type Guardian } from "@/components/data/parents";
 
-interface HalfDayNotice {
-  id: string;
-  studentName: string;
-  studentId: string;
-  className: string;
-  outTime: Date;
-  reason: string;
-  guardianName: string;
-  guardianContact: string;
-}
+ 
+// Added sections data to power the Export Dialog Accordion
+const guardianSections = [
+  {
+    title: "Personal Details",
+    icon: User,
+    fields: ["Full Name", "Gender", "Date of Birth", "Occupation", "Education"],
+  },
+  {
+    title: "Contact Information",
+    icon: Phone,
+    fields: ["Phone Number", "Email Address", "Full Address", "City", "State"],
+  },
+  {
+    title: "Children Details",
+    icon: GraduationCap,
+    fields: ["Child Name", "Class", "Section", "Admission No", "Relationship"],
+  },
+];
 
-interface HalfDayNoticesProps {
-  notices?: HalfDayNotice[];
-  onAddNotice?: () => void;
-  onEditNotice?: (id: string) => void;
-  onPrintList?: () => void;
-  isLoading?: boolean;
-}
+ 
 
-const dummyNotices = generateHalfDayNotices(20);
-
-export default function HalfDayNotices({
-  notices = dummyNotices,
-  onAddNotice,
-  onEditNotice,
-  isLoading = false,
-}: HalfDayNoticesProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
-  );
+export default function Guardians() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClass, setSelectedClass] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedSiblings, setSelectedSiblings] = useState("all");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
-  const [dummyNotices] = useState(() => generateHalfDayNotices(20));
-  const [openPrintDialog, setOpenPrintDialog] = useState(false);
-  const data = notices.length ? notices : dummyNotices;
   const [openFilterDialog, setOpenFilterDialog] = useState(false);
+  const [openExportDialog, setOpenExportDialog] = useState(false);
+  const [openFormatDialog, setOpenFormatDialog] = useState(false);
 
-  const activeFilterCount = selectedClass !== "all" ? 1 : 0;
+  const activeFilterCount =
+    (selectedClass !== "all" ? 1 : 0) +
+    (selectedType !== "all" ? 1 : 0) +
+    (selectedSiblings !== "all" ? 1 : 0);
 
   const hasActiveFilters = activeFilterCount > 0;
 
-  // Filter notices based on date and class
-  const filteredNotices = data.filter((notice) => {
-    const matchesDate =
-      !selectedDate ||
-      format(notice.outTime, "yyyy-MM-dd") ===
-        format(selectedDate, "yyyy-MM-dd");
+  const filteredGuardians = dummyGuardians.filter((guardian) => {
+    const matchesSearch =
+      guardian.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      guardian.phone.includes(searchTerm);
+
     const matchesClass =
       selectedClass === "all" ||
-      notice.className.toLowerCase() === selectedClass.toLowerCase();
-    return matchesDate && matchesClass;
+      guardian.className.toLowerCase() === selectedClass.toLowerCase();
+
+    const matchesType =
+      selectedType === "all" ||
+      guardian.type.toLowerCase() === selectedType.toLowerCase();
+
+    const matchesSiblings =
+      selectedSiblings === "all" ||
+      (selectedSiblings === "yes" && guardian.hasSiblings) ||
+      (selectedSiblings === "no" && !guardian.hasSiblings);
+
+    return matchesSearch && matchesClass && matchesType && matchesSiblings;
   });
 
-  // Pagination logic
   const totalPages = Math.ceil(
-    filteredNotices.length / parseInt(entriesPerPage),
+    filteredGuardians.length / parseInt(entriesPerPage),
   );
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentNotices = filteredNotices.slice(startIndex, endIndex);
+  const currentGuardians = filteredGuardians.slice(startIndex, endIndex);
 
   const handleClassChange = (value: string) => {
     setSelectedClass(value);
+    setCurrentPage(1);
+  };
+
+  const handleTypeChange = (value: string) => {
+    setSelectedType(value);
+    setCurrentPage(1);
+  };
+
+  const handleSiblingsChange = (value: string) => {
+    setSelectedSiblings(value);
     setCurrentPage(1);
   };
 
@@ -123,22 +138,18 @@ export default function HalfDayNotices({
     setCurrentPage(1);
   };
 
-  const handleDateChange = (date: Date | undefined) => {
-    setSelectedDate(date);
-    setCurrentPage(1);
-  };
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
 
   const clearFilters = () => {
-    setSelectedDate(new Date());
     setSelectedClass("all");
+    setSelectedType("all");
+    setSelectedSiblings("all");
     setCurrentPage(1);
   };
 
-  // Generate page numbers to display
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
@@ -175,46 +186,130 @@ export default function HalfDayNotices({
   };
 
   return (
-    <div className="min-h-screen   p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
+             
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Half Day Notices
+              Guardians
             </h1>
           </div>
           <div className="flex gap-3">
             <Button
               variant="outline"
-              onClick={() => setOpenPrintDialog(true)}
-              className="border-0 hover:bg-gray-300 dark:hover:bg-neutral-900"
+              onClick={() => setOpenExportDialog(true)}
+              className="hover:bg-gray-300 dark:hover:bg-neutral-900 border border-black/20 dark:border-white/20"
             >
-              <Printer className="mr-2 h-4 w-4" />
-              Print List
+              <Upload className="mr-2 h-4 w-4" />
+              Export
             </Button>
-
-            <Button
-              onClick={onAddNotice}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
-            >
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
-              Add Notice
+              Add Guardian
             </Button>
           </div>
         </div>
 
-        {/* download button */}
-
-        <Dialog open={openPrintDialog} onOpenChange={setOpenPrintDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Choose which format you want to use</DialogTitle>
+        {/* Export Dialog */}
+        <Dialog open={openExportDialog} onOpenChange={setOpenExportDialog}>
+          <DialogContent className="sm:max-w-3xl max-h-[85vh] p-0">
+            <DialogHeader className="border-b px-6 py-4">
+              <DialogTitle className="flex items-center gap-2">
+                <FileSpreadsheet className="h-5 w-5" />
+                Export Guardians
+              </DialogTitle>
+              <DialogDescription>
+                Choose the fields you want to include in the export.
+              </DialogDescription>
             </DialogHeader>
 
-            <div className="grid gap-4 mt-4">
+            <div className="flex items-center justify-between border-b px-6 py-3">
+              <p className="text-sm text-muted-foreground">
+                15 fields selected
+              </p>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  Select All
+                </Button>
+                <Button variant="ghost" size="sm">
+                  Clear All
+                </Button>
+              </div>
+            </div>
+
+            <div className="max-h-[55vh] overflow-y-auto px-6 py-4">
+              <Accordion
+                type="multiple"
+                defaultValue={[guardianSections[0]?.title]}
+                className="space-y-2"
+              >
+                {guardianSections.map((section) => {
+                  const Icon = section.icon;
+                  return (
+                    <AccordionItem
+                      key={section.title}
+                      value={section.title}
+                      className="border rounded-lg px-4"
+                    >
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="flex items-center gap-2">
+                          <Icon className="h-4 w-4" />
+                          <span>{section.title}</span>
+                          <span className="text-xs text-muted-foreground">
+                            ({section.fields.length})
+                          </span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="grid md:grid-cols-3 gap-3 pt-2">
+                          {section.fields.map((field) => (
+                            <label
+                              key={field}
+                              className="flex items-center gap-2 rounded-md p-2 hover:bg-muted cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                defaultChecked
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <span className="text-sm">{field}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+            </div>
+
+            <DialogFooter className="border-t px-6 py-4">
+              <Button
+                variant="outline"
+                onClick={() => setOpenExportDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={() => setOpenFormatDialog(true)}>Export</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Format Dialog */}
+        <Dialog open={openFormatDialog} onOpenChange={setOpenFormatDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Choose Export Format</DialogTitle>
+              <DialogDescription>
+                Select the format for exporting guardian data.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
               {/* PDF */}
-              <div className="flex items-center justify-between border rounded-lg p-4">
+              <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="flex items-center gap-3">
                   <FileText className="h-10 w-10 text-red-500" />
                   <div>
@@ -224,11 +319,11 @@ export default function HalfDayNotices({
                     </p>
                   </div>
                 </div>
-
                 <Button
                   onClick={() => {
                     console.log("Generate PDF");
-                    setOpenPrintDialog(false);
+                    setOpenFormatDialog(false);
+                    setOpenExportDialog(false);
                   }}
                 >
                   Select
@@ -236,7 +331,7 @@ export default function HalfDayNotices({
               </div>
 
               {/* CSV */}
-              <div className="flex items-center justify-between border rounded-lg p-4">
+              <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="flex items-center gap-3">
                   <Sheet className="h-10 w-10 text-green-600" />
                   <div>
@@ -246,12 +341,12 @@ export default function HalfDayNotices({
                     </p>
                   </div>
                 </div>
-
                 <Button
                   variant="secondary"
                   onClick={() => {
                     console.log("Generate CSV");
-                    setOpenPrintDialog(false);
+                    setOpenFormatDialog(false);
+                    setOpenExportDialog(false);
                   }}
                 >
                   Select
@@ -260,12 +355,12 @@ export default function HalfDayNotices({
             </div>
           </DialogContent>
         </Dialog>
-        {/* filter pop up dialog */}
+
+        {/* Filter Dialog */}
         <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Filter Students</DialogTitle>
-
+              <DialogTitle>Filter Guardians</DialogTitle>
               <DialogDescription>
                 Apply filters to narrow down records.
               </DialogDescription>
@@ -274,24 +369,49 @@ export default function HalfDayNotices({
             <div className="space-y-4 py-2">
               <div className="space-y-2">
                 <Label>Class</Label>
-
                 <Select value={selectedClass} onValueChange={setSelectedClass}>
                   <SelectTrigger>
-                    <SelectValue placeholder="All Classes" />
+                    <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
-
                   <SelectContent>
                     <SelectItem value="all">All Classes</SelectItem>
+                    <SelectItem value="class 1">Class 1</SelectItem>
+                    <SelectItem value="class 2">Class 2</SelectItem>
+                    <SelectItem value="class 3">Class 3</SelectItem>
+                    <SelectItem value="class 4">Class 4</SelectItem>
+                    <SelectItem value="class 5">Class 5</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-                    <SelectItem value="Class 1">Class 1</SelectItem>
+              <div className="space-y-2">
+                <Label>Guardian Type</Label>
+                <Select value={selectedType} onValueChange={setSelectedType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="father">Father</SelectItem>
+                    <SelectItem value="mother">Mother</SelectItem>
+                    <SelectItem value="guardian">Guardian</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-                    <SelectItem value="Class 2">Class 2</SelectItem>
-
-                    <SelectItem value="Class 3">Class 3</SelectItem>
-
-                    <SelectItem value="Class 4">Class 4</SelectItem>
-
-                    <SelectItem value="Class 5">Class 5</SelectItem>
+              <div className="space-y-2">
+                <Label>Has Siblings</Label>
+                <Select
+                  value={selectedSiblings}
+                  onValueChange={setSelectedSiblings}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Has Siblings?" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -301,7 +421,6 @@ export default function HalfDayNotices({
               <Button variant="outline" onClick={clearFilters}>
                 Clear Filters
               </Button>
-
               <Button onClick={() => setOpenFilterDialog(false)}>
                 Apply Filters
               </Button>
@@ -309,48 +428,22 @@ export default function HalfDayNotices({
           </DialogContent>
         </Dialog>
 
-        {/* Filter Section */}
-        <Card className="shadow-sm  ">
+        {/* Search + Filter Bar */}
+        <Card className="shadow-sm">
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-              {/* Search Input */}
               <div className="relative w-full lg:w-96">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="text"
-                  placeholder="Search Name or Phone..."
+                  placeholder="Name, Email, Phone..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="pl-10   focus-visible:ring-indigo-500"
+                  className="pl-10 focus-visible:ring-indigo-500"
                 />
               </div>
 
-              {/* Filters +  Date Picker */}
-              <div className="flex flex-wrap w-full lg:w-auto gap-3">
-                {/* Date Picker */}
-                <div className="w-full lg:w-auto">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full lg:w-auto justify-start text-left font-normal  "
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-slate-500" />
-                        {selectedDate
-                          ? format(selectedDate, "MM/dd/yyyy")
-                          : "mm/dd/yyyy"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={handleDateChange}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
+              <div className="flex gap-2">
                 <Button
                   variant="outline"
                   onClick={() => setOpenFilterDialog(true)}
@@ -369,17 +462,16 @@ export default function HalfDayNotices({
         </Card>
 
         {/* Table Section */}
-        <Card className="shadow-sm ">
+        <Card className="shadow-sm">
           <CardContent className="p-0">
-            {/* Table Controls (Show entries) */}
             <div className="p-4 md:p-6 bg-white flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-sm  ">
+              <div className="flex items-center gap-2 text-sm">
                 <span>Show</span>
                 <Select
                   value={entriesPerPage}
                   onValueChange={handleEntriesPerPageChange}
                 >
-                  <SelectTrigger className="w-[70px] h-8 bg-white  ">
+                  <SelectTrigger className="w-[70px] h-8 bg-white">
                     <SelectValue placeholder="10" />
                   </SelectTrigger>
                   <SelectContent>
@@ -392,111 +484,85 @@ export default function HalfDayNotices({
                 <span>entries</span>
               </div>
               <div className="text-sm text-slate-600">
-                Showing {filteredNotices.length === 0 ? 0 : startIndex + 1} to{" "}
-                {Math.min(endIndex, filteredNotices.length)} of{" "}
-                {filteredNotices.length} entries
+                Showing {filteredGuardians.length === 0 ? 0 : startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredGuardians.length)} of{" "}
+                {filteredGuardians.length} entries
               </div>
             </div>
 
-            {/* Data Table */}
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      #
+                      Name
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Student Details
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Class
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Out Time
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500  uppercase tracking-wider py-3">
-                      Reason
-                    </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Guardian
+                      Type
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Phone
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
-                      Action
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Email
                     </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Children (Class)
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Is Primary
+                    </TableHead>
+                     
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {isLoading ? (
+                  {currentGuardians.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="h-64 text-center">
-                        <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ) : currentNotices.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-64 text-center">
+                      <TableCell colSpan={6} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
                           <div className="p-3 rounded-full bg-slate-100">
                             <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            No half day notices found for this date.
+                            No guardians found.
                           </p>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentNotices.map((notice, index) => (
+                    currentGuardians.map((guardian) => (
                       <TableRow
-                        key={notice.id}
-                        className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
+                        key={guardian.id}
+                        className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
-                        <TableCell className="py-3 text-slate-600">
-                          {startIndex + index + 1}
+                        <TableCell className="py-3 font-medium">
+                          {guardian.name}
                         </TableCell>
                         <TableCell className="py-3">
-                          <div className="flex flex-col">
-                            <span className="font-medium  ">
-                              {notice.studentName}
-                            </span>
-                            <span className="text-sm text-slate-500">
-                              ID: {notice.studentId}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                            {notice.className}
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
+                            {guardian.type}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3  ">
-                          {format(notice.outTime, "hh:mm a")}
-                        </TableCell>
-
-                        <TableCell className="py-3 max-w-36 truncate  ">
-                          {notice.reason}
-                        </TableCell>
-
                         <TableCell className="py-3">
-                          {notice.guardianName}
+                          {guardian.phone}
                         </TableCell>
-                        <TableCell className="text-sm  ">
-                          {notice.guardianContact}
+                        <TableCell className="py-3">
+                          {guardian.email}
                         </TableCell>
-                        <TableCell className="text-right py-3 ">
+                        <TableCell className="py-3">
+                          {guardian.children}
+                        </TableCell>
+                        
+                        <TableCell className=" py-3">
                           <Button
-                            variant="ghost"
                             size="sm"
-                            className="border border-black/20  dark:border-white/20"
-                            onClick={() => onEditNotice?.(notice.id)}
+                            className={
+                              guardian.isPrimary
+                                ? "bg-green-600 hover:bg-green-700 text-white"
+                                : "bg-zinc-300 hover:bg-zinc-200 text-zinc-700"
+                            }
                           >
-                            Edit
+                            {guardian.isPrimary ? "Primary" : "Secondary"}
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -509,7 +575,7 @@ export default function HalfDayNotices({
             {/* Pagination */}
             {totalPages > 0 && (
               <div className="p-4 sm:p-6 border-t border-slate-100">
-                <div className="flex items-center justify-cener">
+                <div className="flex items-center justify-center">
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"

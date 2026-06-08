@@ -14,10 +14,10 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
- 
   },
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
+    "@radix-ui/react-accordion": "^1.2.13",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "latest",
     "@radix-ui/react-dialog": "^1.1.16",
@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^4.4.0",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.17.0",
     "next": "^16.2.7",
     "next-themes": "^0.2.1",

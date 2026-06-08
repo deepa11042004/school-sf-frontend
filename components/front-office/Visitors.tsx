@@ -1,10 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent,   } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -36,6 +45,14 @@ export default function VisitorsLog() {
   const [purpose, setPurpose] = useState("all");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
+
+  const activeFilterCount = purpose !== "all" ? 1 : 0;
+  const hasActiveFilters = activeFilterCount > 0;
+
+  const clearFilters = () => {
+    setPurpose("all");
+  };
 
   // Filter visitors based on search and purpose
   const filteredVisitors = dummyVisitors.filter((visitor) => {
@@ -124,6 +141,58 @@ export default function VisitorsLog() {
           </Button>
         </div>
 
+        <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Filter Visitors</DialogTitle>
+
+              <DialogDescription>
+                Apply filters to narrow down visitor records.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
+              <div className="space-y-2">
+                <Label>Purpose</Label>
+
+                <Select value={purpose} onValueChange={setPurpose}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Purposes" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="all">All Purposes</SelectItem>
+
+                    <SelectItem value="admission-inquiry">
+                      Admission Inquiry
+                    </SelectItem>
+
+                    <SelectItem value="parent-meet">Parent Meet</SelectItem>
+
+                    <SelectItem value="interview">Interview</SelectItem>
+
+                    <SelectItem value="vendor">Vendor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setOpenFilterDialog(false);
+                }}
+              >
+                Apply Filters
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         {/* Search and Filter Section */}
         <Card className="shadow-sm  ">
           <CardContent className="p-4 sm:p-6">
@@ -141,26 +210,18 @@ export default function VisitorsLog() {
               </div>
 
               {/* Filters */}
-              <div className="flex w-full md:w-auto gap-3">
-                <Select value={purpose} onValueChange={handleFilterChange}>
-                  <SelectTrigger className="w-full md:w-[180px]  ">
-                    <SelectValue placeholder="All Purposes" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Purposes</SelectItem>
-                    <SelectItem value="meeting">Admission Inquiry</SelectItem>
-                    <SelectItem value="interview">Parent Meet</SelectItem>
-                    <SelectItem value="delivery">Interview</SelectItem>
-                    <SelectItem value="delivery">Vendor</SelectItem>
-                  </SelectContent>
-                </Select>
-
+              <div className="flex gap-2">
                 <Button
-                  variant="secondary"
-                  className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
+                  variant="outline"
+                  onClick={() => setOpenFilterDialog(true)}
                 >
                   <Filter className="mr-2 h-4 w-4" />
-                  Filter
+                  Filters
+                  {hasActiveFilters && (
+                    <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 py-0.5 text-xs font-medium">
+                      {activeFilterCount}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>
@@ -266,8 +327,6 @@ export default function VisitorsLog() {
                             ? format(new Date(visitor.date), "MMM dd, yyyy")
                             : "-"}
                         </TableCell>
-
-                        
 
                         <TableCell className="py-3">{visitor.inTime}</TableCell>
                         <TableCell className="py-3   items-center text-center">

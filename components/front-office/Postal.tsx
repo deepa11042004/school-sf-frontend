@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -25,6 +26,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
+  DialogFooter
 } from "@/components/ui/dialog";
 import { postalDummyData, type PostalRecord } from "@/components/data/postal";
 import {
@@ -60,7 +63,18 @@ export default function Postal({
 
   const [openPrintDialog, setOpenPrintDialog] = useState(false);
   const data = notices.length ? notices : postalDummyData;
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
+  const [selectedDirection, setSelectedDirection] = useState("all");
 
+  const activeFilterCount = [selectedDirection].filter(
+    (value) => value !== "all",
+  ).length;
+
+  const hasActiveFilters = activeFilterCount > 0;
+
+  const clearFilters = () => {
+    setSelectedDirection("all");
+  };
   // Filter notices based on date and class
   const filteredNotices = data.filter((notice) => {
     const matchesSearch =
@@ -93,12 +107,6 @@ export default function Postal({
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const clearFilters = () => {
-    setSelectedDate(new Date());
-    setSelectedClass("all");
     setCurrentPage(1);
   };
 
@@ -137,8 +145,6 @@ export default function Postal({
 
     return pages;
   };
-
-  const hasActiveFilters = selectedClass !== "all";
 
   return (
     <div className="min-h-screen   p-4 md:p-6 lg:p-8">
@@ -199,14 +205,14 @@ export default function Postal({
                 </Button>
               </div>
 
-              {/* Excel */}
+              {/* CSV */}
               <div className="flex items-center justify-between border rounded-lg p-4">
                 <div className="flex items-center gap-3">
                   <Sheet className="h-10 w-10 text-green-600" />
                   <div>
-                    <p className="font-medium">Excel Format</p>
+                    <p className="font-medium">CSV Format</p>
                     <p className="text-sm text-muted-foreground">
-                      Export as XLSX file
+                      Export as CSV file
                     </p>
                   </div>
                 </div>
@@ -214,7 +220,7 @@ export default function Postal({
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    console.log("Generate Excel");
+                    console.log("Generate CSV");
                     setOpenPrintDialog(false);
                   }}
                 >
@@ -222,6 +228,57 @@ export default function Postal({
                 </Button>
               </div>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* filter pop up dialog */}
+
+        <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Filter Records</DialogTitle>
+
+              <DialogDescription>
+                Apply filters to narrow down records.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
+              <div className="space-y-2">
+                <Label>Direction</Label>
+
+                <Select
+                  value={selectedDirection}
+                  onValueChange={setSelectedDirection}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Directions" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="all">All Directions</SelectItem>
+
+                    <SelectItem value="dispatch">Dispatch</SelectItem>
+
+                    <SelectItem value="receive">Receive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setOpenFilterDialog(false);
+                }}
+              >
+                Apply Filters
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
 
@@ -241,31 +298,26 @@ export default function Postal({
                 />
               </div>
 
-              {/* Filters +  Date Picker */}
-              <div className="flex flex-wrap w-full lg:w-auto gap-3">
-                <Select value={selectedClass} onValueChange={handleClassChange}>
-                  <SelectTrigger className="w-full lg:w-[180px]  ">
-                    <SelectValue placeholder="All Directions" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Directions</SelectItem>
-                    <SelectItem value="dispatch">Dispatch</SelectItem>
-                    <SelectItem value="receive">Receive</SelectItem>
-                  </SelectContent>
-                </Select>
-
+              {/* Filters  */}
+              <div className="flex gap-2">
                 <Button
-                  variant="secondary"
-                  className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
-                  onClick={clearFilters}
+                  variant="outline"
+                  onClick={() => setOpenFilterDialog(true)}
                 >
                   <Filter className="mr-2 h-4 w-4" />
-                  {hasActiveFilters ? "Clear Filters" : "Filter"}
+                  Filters
+                  {hasActiveFilters && (
+                    <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 py-0.5 text-xs font-medium">
+                      {activeFilterCount}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>
           </CardContent>
         </Card>
+
+        
 
         {/* Table Section */}
         <Card className="shadow-sm ">
@@ -332,7 +384,9 @@ export default function Postal({
 
                         <TableCell>REF-{notice.referenceNo}</TableCell>
 
-                        <TableCell className="py-3 max-w-xs truncate">{notice.title}</TableCell>
+                        <TableCell className="py-3 max-w-xs truncate">
+                          {notice.title}
+                        </TableCell>
 
                         <TableCell>
                           <span

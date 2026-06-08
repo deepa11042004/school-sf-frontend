@@ -156,7 +156,7 @@ export const menuData: MenuSection[] = [
           {
             id: "setup",
             label: "Setup",
-             href: "/blank",
+             href: "/front-office/setup",
             icon: Server,
           },
         ],

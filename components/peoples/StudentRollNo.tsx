@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -11,15 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -29,87 +20,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  complaintsDummyData,
-  type Complaint,
-} from "@/components/data/complaints";
-import {
-  Search,
-  Plus,
-  CalendarIcon,
-  Filter,
   ChevronLeft,
   ChevronRight,
   FileText,
+  Save,
+  Search,
 } from "lucide-react";
-import { format } from "date-fns";
 
-interface ComplaintsProps {
-  complaints?: Complaint[];
-  onAddComplaint?: () => void;
-  onEditComplaint?: (id: string) => void;
-}
+import { dummyRolls } from "@/components/data/StudentRollData";
 
-export default function Complaints({
-  complaints = complaintsDummyData,
-}: ComplaintsProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
+export default function ManageRollNumbers() {
+  const [selectedClass, setSelectedClass] = useState("default");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
-  const [openFilterDialog, setOpenFilterDialog] = useState(false);
+  const [rolls, setRolls] = useState(dummyRolls);
 
-  const activeFilterCount =
-    (selectedType !== "all" ? 1 : 0) + (selectedStatus !== "all" ? 1 : 0);
+  const filteredRolls = rolls;
 
-  const hasActiveFilters = activeFilterCount > 0;
-
-  const filteredComplaints = complaints.filter((complaint) => {
-    const matchesSearch =
-      complaint.complainant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      complaint.referenceNo.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesType =
-      selectedType === "all" || complaint.type === selectedType;
-
-    const matchesStatus =
-      selectedStatus === "all" || complaint.status === selectedStatus;
-
-    return matchesSearch && matchesType && matchesStatus;
-  });
-
-  const totalPages = Math.ceil(
-    filteredComplaints.length / parseInt(entriesPerPage),
-  );
+  const totalPages = Math.ceil(filteredRolls.length / parseInt(entriesPerPage));
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentComplaints = filteredComplaints.slice(startIndex, endIndex);
-
-  const handleTypeChange = (value: string) => {
-    setSelectedType(value);
-    setCurrentPage(1);
-  };
-
-  const handleStatusChange = (value: string) => {
-    setSelectedStatus(value);
-    setCurrentPage(1);
-  };
+  const currentRolls = filteredRolls.slice(startIndex, endIndex);
 
   const handleEntriesPerPageChange = (value: string) => {
     setEntriesPerPage(value);
     setCurrentPage(1);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const clearFilters = () => {
-    setSearchTerm("");
-    setSelectedType("all");
-    setSelectedStatus("all");
-    setCurrentPage(1);
+  const handleRollChange = (id: string, value: string) => {
+    setRolls(rolls.map((r) => (r.id === id ? { ...r, rollNumber: value } : r)));
   };
 
   const getPageNumbers = () => {
@@ -154,116 +93,43 @@ export default function Complaints({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Complaints
+              Manage Roll Numbers
             </h1>
           </div>
-
-          <div className="flex gap-3">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              New Complaint
-            </Button>
-          </div>
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            <Save className="mr-2 h-4 w-4" />
+            Save Changes
+          </Button>
         </div>
-
-        {/* filter pop up dialog  */}
-        <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Filter Complaints</DialogTitle>
-
-              <DialogDescription>
-                Apply filters to narrow down complaint records.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4 py-2">
-              {/* Type */}
-              <div className="space-y-2">
-                <Label>Type</Label>
-
-                <Select value={selectedType} onValueChange={setSelectedType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Types" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-
-                    <SelectItem value="service">Service</SelectItem>
-
-                    <SelectItem value="product">Product</SelectItem>
-
-                    <SelectItem value="facility">Facility</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Status */}
-              <div className="space-y-2">
-                <Label>Status</Label>
-
-                <Select
-                  value={selectedStatus}
-                  onValueChange={setSelectedStatus}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Status" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-
-                    <SelectItem value="pending">Pending</SelectItem>
-
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-
-                    <SelectItem value="resolved">Resolved</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <DialogFooter>
-              <Button variant="outline" onClick={clearFilters}>
-                Clear Filters
-              </Button>
-
-              <Button onClick={() => setOpenFilterDialog(false)}>
-                Apply Filters
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
 
         {/* Filter Section */}
         <Card className="shadow-sm">
           <CardContent className="p-4 sm:p-6">
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-              {/* Search Input */}
-              <div className="relative w-full lg:w-96">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input
-                  type="text"
-                  placeholder="Search by Name or Phone..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  className="pl-10 focus-visible:ring-indigo-500"
-                />
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              {/* Select Input */}
+              <div className="w-full sm:w-72">
+                <Select value={selectedClass} onValueChange={setSelectedClass}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Class & Section" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="default">
+                      Select Class & Section
+                    </SelectItem>
+                    <SelectItem value="nc-a">NC - A</SelectItem>
+                    <SelectItem value="1-a">Class 1 - A</SelectItem>
+                    <SelectItem value="1-b">Class 1 - B</SelectItem>
+                    <SelectItem value="2-a">Class 2 - A</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setOpenFilterDialog(true)}
-                >
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filters
-                  {hasActiveFilters && (
-                    <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 py-0.5 text-xs font-medium">
-                      {activeFilterCount}
-                    </span>
-                  )}
+              {/* Button */}
+              <div className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto">
+                  <Search className="mr-2 h-4 w-4" />
+                  Fetch Students
                 </Button>
               </div>
             </div>
@@ -273,7 +139,7 @@ export default function Complaints({
         {/* Table Section */}
         <Card className="shadow-sm">
           <CardContent className="p-0">
-            {/* Table Controls (Show entries) */}
+            {/* Table Controls */}
             <div className="p-4 md:p-6 bg-white flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-sm">
                 <span>Show</span>
@@ -294,9 +160,9 @@ export default function Complaints({
                 <span>entries</span>
               </div>
               <div className="text-sm text-slate-600">
-                Showing {filteredComplaints.length === 0 ? 0 : startIndex + 1}{" "}
-                to {Math.min(endIndex, filteredComplaints.length)} of{" "}
-                {filteredComplaints.length} entries
+                Showing {filteredRolls.length === 0 ? 0 : startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredRolls.length)} of{" "}
+                {filteredRolls.length} entries
               </div>
             </div>
 
@@ -306,22 +172,22 @@ export default function Complaints({
                 <TableHeader>
                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Reference No
+                      #
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Complainant
+                      Student Name
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Type
+                      Admission No
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Category
+                      Date of Birth
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Date
+                      Roll Number
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Status
+                      Phone Number
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
                       Actions
@@ -329,7 +195,7 @@ export default function Complaints({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentComplaints.length === 0 ? (
+                  {currentRolls.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
@@ -337,54 +203,36 @@ export default function Complaints({
                             <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            No complaints found.
+                            No students found.
                           </p>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentComplaints.map((complaint) => (
+                    currentRolls.map((student, index) => (
                       <TableRow
-                        key={complaint.id}
+                        key={student.id}
                         className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
                         <TableCell className="py-3 font-medium">
-                          {complaint.referenceNo}
+                          {startIndex + index + 1}
                         </TableCell>
-                        <TableCell className="py-3">
-                          {complaint.complainant}
+                        <TableCell className="py-3 font-medium">
+                          {student.name}
                         </TableCell>
-                        <TableCell className="py-3">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
-                              complaint.type === "service"
-                                ? "bg-indigo-100 text-indigo-800"
-                                : complaint.type === "product"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : "bg-orange-100 text-orange-800"
-                            }`}
-                          >
-                            {complaint.type}
-                          </span>
+                        <TableCell className="py-3 ">
+                          {student.admissionNo}
                         </TableCell>
-                        <TableCell className="py-3">
-                          {complaint.category}
+                        <TableCell className="py-3 ">
+                          {student.dob
+                            ? format(new Date(student.dob), "MMM dd, yyyy")
+                            : "-"}
                         </TableCell>
-                        <TableCell className="py-3">
-                          {format(new Date(complaint.date), "MMM dd, yyyy")}
+                        <TableCell className="py-3 text-center">
+                          {student.rollNumber}
                         </TableCell>
-                        <TableCell className="py-3">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
-                              complaint.status === "resolved"
-                                ? "bg-green-100 text-green-800"
-                                : complaint.status === "pending"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-blue-100 text-blue-800"
-                            }`}
-                          >
-                            {complaint.status}
-                          </span>
+                        <TableCell className="py-3  ">
+                          {student.phone}
                         </TableCell>
                         <TableCell className="text-right py-3">
                           <Button

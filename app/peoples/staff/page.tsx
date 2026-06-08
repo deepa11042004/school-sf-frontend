@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Layout from "@/components/cmsfullform/layout"
-import { BlankContent } from "@/components/blank";
+import StafList from "@/components/peoples/StafList";
 
 export const metadata: Metadata = {
   title: " SF-Software Dashboard - OpenSource CMS",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <Layout>
-      <BlankContent />
+    <StafList/>
     </Layout>
   );
 }

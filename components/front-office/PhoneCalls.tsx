@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";  
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,18 +19,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { Search, Filter, Plus, AlertCircle, ChevronLeft, ChevronRight, CalendarIcon } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Plus,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  CalendarIcon,
+} from "lucide-react";
 import { format } from "date-fns";
 
 // [CHANGE 1]: Fixed the import to match the exported name 'dummyCalls'
-import { dummyCalls } from "@/components/data/dummyCalls"; 
+import { dummyCalls } from "@/components/data/dummyCalls";
 
 interface CallLog {
   id: string;
@@ -49,26 +66,34 @@ interface CallsLogProps {
   isLoading?: boolean;
 }
 
-export default function PhoneCalls({ 
-  
-  calls = dummyCalls, 
-  onAddCall, 
+export default function PhoneCalls({
+  calls = dummyCalls,
+  onAddCall,
   onEditCall,
-  isLoading = false 
+  isLoading = false,
 }: CallsLogProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [callType, setCallType] = useState("all");
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
+
+  const activeFilterCount = (dateFilter ? 1 : 0) + (callType !== "all" ? 1 : 0);
+
+  const hasActiveFilters = activeFilterCount > 0;
 
   // Filter calls based on search, call type, and date
   const filteredCalls = calls.filter((call) => {
     const matchesSearch =
       call.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       call.phone.includes(searchTerm);
-    const matchesCallType = callType === "all" || call.callType.toLowerCase() === callType.toLowerCase();
-    const matchesDate = !dateFilter || format(call.date, "yyyy-MM-dd") === format(dateFilter, "yyyy-MM-dd");
+    const matchesCallType =
+      callType === "all" ||
+      call.callType.toLowerCase() === callType.toLowerCase();
+    const matchesDate =
+      !dateFilter ||
+      format(call.date, "yyyy-MM-dd") === format(dateFilter, "yyyy-MM-dd");
     return matchesSearch && matchesCallType && matchesDate;
   });
 
@@ -142,8 +167,6 @@ export default function PhoneCalls({
     return pages;
   };
 
-  const hasActiveFilters = searchTerm || callType !== "all" || dateFilter;
-
   return (
     <div className="min-h-screen   p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -153,9 +176,8 @@ export default function PhoneCalls({
             <h1 className="text-2xl sm:text-3xl font-bold  tracking-tight">
               Calls Log
             </h1>
-            
           </div>
-          <Button 
+          <Button
             onClick={onAddCall}
             className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
           >
@@ -163,6 +185,56 @@ export default function PhoneCalls({
             Add Call
           </Button>
         </div>
+
+        {/* filter pop up dialog */}
+
+        <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Filter Phone Calls</DialogTitle>
+
+              <DialogDescription>
+                Apply filters to narrow down call records.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
+              {/* Call Type */}
+
+              <Label>Call Type</Label>
+
+              <Select value={callType} onValueChange={setCallType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Call Types" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="all">All Call Types</SelectItem>
+
+                  <SelectItem value="followup">Follow Up</SelectItem>
+
+                  <SelectItem value="new">New Inquiry</SelectItem>
+
+                  <SelectItem value="complaint">Complaint</SelectItem>
+
+                  <SelectItem value="feedback">Feedback</SelectItem>
+
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+
+              <Button onClick={() => setOpenFilterDialog(false)}>
+                Apply Filters
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Search and Filter Section */}
         <Card className="shadow-sm  ">
@@ -189,7 +261,9 @@ export default function PhoneCalls({
                       className="w-full lg:w-auto justify-start text-left font-normal  "
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateFilter ? format(dateFilter, "MM/dd/yyyy") : "mm/dd/yyyy"}
+                      {dateFilter
+                        ? format(dateFilter, "MM/dd/yyyy")
+                        : "mm/dd/yyyy"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -197,32 +271,21 @@ export default function PhoneCalls({
                       mode="single"
                       selected={dateFilter}
                       onSelect={handleDateFilterChange}
-                      
                     />
                   </PopoverContent>
                 </Popover>
 
-                <Select value={callType} onValueChange={handleFilterChange}>
-                  <SelectTrigger className="w-full lg:w-[180px]  ">
-                    <SelectValue placeholder="All Call Types" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Call Types</SelectItem> 
-                    <SelectItem value="followup">Follow Up</SelectItem>
-                    <SelectItem value="new">New Inquiry</SelectItem>
-                    <SelectItem value="complaint">Complaint</SelectItem>
-                    <SelectItem value="feedback">Feedback</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button 
-                  variant="secondary" 
-                  className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0"
-                  onClick={clearFilters}
+                <Button
+                  variant="outline"
+                  onClick={() => setOpenFilterDialog(true)}
                 >
                   <Filter className="mr-2 h-4 w-4" />
-                  {hasActiveFilters ? "Clear Filters" : "Filter"}
+                  Filters
+                  {hasActiveFilters && (
+                    <span className="ml-2 rounded-full bg-primary text-primary-foreground px-2 py-0.5 text-xs font-medium">
+                      {activeFilterCount}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>
@@ -233,10 +296,13 @@ export default function PhoneCalls({
         <Card className="shadow-sm  ">
           <CardContent className="p-0">
             {/* Table Controls (Show entries) */}
-           <div className="p-4 md:p-6  flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
+            <div className="p-4 md:p-6  flex flex-col sm:flex-row items-start md:items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-sm ">
                 <span>Show</span>
-                <Select value={entriesPerPage} onValueChange={handleEntriesPerPageChange}>
+                <Select
+                  value={entriesPerPage}
+                  onValueChange={handleEntriesPerPageChange}
+                >
                   <SelectTrigger className="w-[70px] h-8 ">
                     <SelectValue placeholder="10" />
                   </SelectTrigger>
@@ -250,7 +316,9 @@ export default function PhoneCalls({
                 <span>entries</span>
               </div>
               <div className="text-sm text-slate-600">
-                Showing {filteredCalls.length === 0 ? 0 : startIndex + 1} to {Math.min(endIndex, filteredCalls.length)} of {filteredCalls.length} entries
+                Showing {filteredCalls.length === 0 ? 0 : startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredCalls.length)} of{" "}
+                {filteredCalls.length} entries
               </div>
             </div>
 
@@ -258,7 +326,7 @@ export default function PhoneCalls({
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
+                  <TableRow className="bg-slate-50/10 hover:bg-slate-50/10   ">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Name
                     </TableHead>
@@ -299,11 +367,13 @@ export default function PhoneCalls({
                             <AlertCircle className="h-6 w-6 text-red-500" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            {hasActiveFilters ? "No calls found matching your filters" : "No calls found"}
+                            {hasActiveFilters
+                              ? "No calls found matching your filters"
+                              : "No calls found"}
                           </p>
                           {hasActiveFilters && (
-                            <Button 
-                              variant="link" 
+                            <Button
+                              variant="link"
                               onClick={clearFilters}
                               className="text-indigo-600 hover:text-indigo-700"
                             >
@@ -317,7 +387,7 @@ export default function PhoneCalls({
                     currentCalls.map((call) => (
                       <TableRow
                         key={call.id}
-                         className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
+                        className="border-b last:border-b-0  hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
                         <TableCell className="font-medium py-3">
                           {call.name}
@@ -330,21 +400,32 @@ export default function PhoneCalls({
                           {format(call.nextFollowUp, "MMM dd, yyyy")}
                         </TableCell>
                         <TableCell className="py-3">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                            ${call.callType.toLowerCase() === 'followup' ? 'bg-blue-100 text-blue-800' : 
-                              call.callType.toLowerCase() === 'new' ? 'bg-green-100 text-green-800' :
-                              call.callType.toLowerCase() === 'complaint' ? 'bg-red-100 text-red-800' :
-                              call.callType.toLowerCase() === 'feedback' ? 'bg-purple-100 text-purple-800' :
-                              'bg-gray-100 text-gray-800'}`}>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                            ${
+                              call.callType.toLowerCase() === "followup"
+                                ? "bg-blue-100 text-blue-800"
+                                : call.callType.toLowerCase() === "new"
+                                  ? "bg-green-100 text-green-800"
+                                  : call.callType.toLowerCase() === "complaint"
+                                    ? "bg-red-100 text-red-800"
+                                    : call.callType.toLowerCase() === "feedback"
+                                      ? "bg-purple-100 text-purple-800"
+                                      : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
                             {call.callType}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3 max-w-10 truncate" title={call.description}>
+                        <TableCell
+                          className="py-3 max-w-10 truncate"
+                          title={call.description}
+                        >
                           {call.description}
                         </TableCell>
                         <TableCell className="text-right py-3 ">
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             className="border border-black/20  dark:border-white/20"
                             onClick={() => onEditCall?.(call.id)}
