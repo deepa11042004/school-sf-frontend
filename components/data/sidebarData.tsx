@@ -242,7 +242,7 @@ export const menuData: MenuSection[] = [
       {
         id: "collect-fees",
         label: "Collect Fees",
-        href: "#",
+        href: "/fee/collect-fees",
         icon: BadgeIndianRupee,
       },
       {

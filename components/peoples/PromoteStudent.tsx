@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, GraduationCap, Search, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  GraduationCap,
+  Search,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,8 +72,6 @@ export default function PromoteStudentsPage() {
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Promote Students</h1>
-
-        
       </div>
 
       {/* Class Selection */}
@@ -223,9 +228,7 @@ export default function PromoteStudentsPage() {
                       return (
                         <Button
                           key={page}
-                          variant={
-                            currentPage === page ? "default" : "outline"
-                          }
+                          variant={currentPage === page ? "default" : "outline"}
                           size="sm"
                           onClick={() => setCurrentPage(page as number)}
                           className={`h-8 w-8 p-0 ${
