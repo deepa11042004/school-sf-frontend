@@ -195,16 +195,20 @@ export default function NewPostal() {
           </div>
 
           {/* Actions */}
-          <div className="mt-8 flex gap-3 justify-start">
-            <Link href="/front-office/postal">
-              <Button variant="outline">Cancel</Button>
-            </Link>
 
-            <Button>
+          <div className="flex items-center gap-3 pt-8  ">
+            <Button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
               <Save className="mr-2 h-4 w-4" />
               Save Postal Record
             </Button>
+            <Link href="/front-office/postal">
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
+          
         </CardContent>
       </Card>
     </div>

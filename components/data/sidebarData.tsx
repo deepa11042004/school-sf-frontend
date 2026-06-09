@@ -248,7 +248,7 @@ export const menuData: MenuSection[] = [
       {
         id: "fees-invoices",
         label: "Fees Invoices",
-        href: "#",
+        href: "/fee/fees-invoices",
         icon: FileText,
       },
       {
@@ -261,19 +261,19 @@ export const menuData: MenuSection[] = [
           {
             id: "fee-heads",
             label: "Fee Heads",
-            href: "#",
+            href: "/fee/fee-heads",
             icon: Landmark,
           },
           {
             id: "class-fee-plans",
             label: "Class Fee Plans",
-            href: "#",
+           href: "/fee/class-fee-plans",
             icon: ReceiptText,
           },
           {
             id: "fee-fine-rules",
             label: "Fee Fine Rules",
-            href: "#",
+           href: "/fee/fine-rules",
             icon: Scale,
           },
         ],

@@ -42,21 +42,14 @@ export default function NewEnuiries() {
                 Name <span className="text-destructive">*</span>
               </Label>
 
-              <Input
-                id="name"
-                placeholder="Enter name"
-              />
+              <Input id="name" placeholder="Enter name" />
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
 
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="Enter phone number"
-              />
+              <Input id="phone" type="tel" placeholder="Enter phone number" />
             </div>
 
             {/* Type */}
@@ -71,25 +64,15 @@ export default function NewEnuiries() {
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="parent">
-                    Parent
-                  </SelectItem>
+                  <SelectItem value="parent">Parent</SelectItem>
 
-                  <SelectItem value="student">
-                    Student
-                  </SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
 
-                  <SelectItem value="staff">
-                    Staff
-                  </SelectItem>
+                  <SelectItem value="staff">Staff</SelectItem>
 
-                  <SelectItem value="visitor">
-                    Visitor
-                  </SelectItem>
+                  <SelectItem value="visitor">Visitor</SelectItem>
 
-                  <SelectItem value="other">
-                    Other
-                  </SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -100,9 +83,7 @@ export default function NewEnuiries() {
 
           {/* Description */}
           <div className="mt-6 space-y-2">
-            <Label htmlFor="description">
-              Description / Initial Note
-            </Label>
+            <Label htmlFor="description">Description / Initial Note</Label>
 
             <Textarea
               id="description"
@@ -111,19 +92,19 @@ export default function NewEnuiries() {
             />
           </div>
 
-           
-
-
           {/* Actions */}
-          <div className="mt-8 flex gap-3 justify-start">
-            <Link href="/front-office/admission-enquiries">
-              <Button variant="outline">Cancel</Button>
-            </Link>
 
-            <Button>
+          <div className="flex items-center gap-3 pt-8  ">
+            <Button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
               <MessageSquarePlus className="mr-2 h-4 w-4" />
               Save Enquiry
             </Button>
+            <Link href="/front-office/admission-enquiries">
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

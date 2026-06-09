@@ -1,4 +1,3 @@
-
 "use client";
 
 import { AlertTriangle } from "lucide-react";
@@ -8,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link"
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -40,8 +39,7 @@ export default function CreateComplaints() {
             {/* Complainant Name */}
             <div className="space-y-2">
               <Label htmlFor="complainantName">
-                Complainant Name{" "}
-                <span className="text-destructive">*</span>
+                Complainant Name <span className="text-destructive">*</span>
               </Label>
 
               <Input
@@ -62,25 +60,15 @@ export default function CreateComplaints() {
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="parent">
-                    Parent
-                  </SelectItem>
+                  <SelectItem value="parent">Parent</SelectItem>
 
-                  <SelectItem value="student">
-                    Student
-                  </SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
 
-                  <SelectItem value="staff">
-                    Staff
-                  </SelectItem>
+                  <SelectItem value="staff">Staff</SelectItem>
 
-                  <SelectItem value="visitor">
-                    Visitor
-                  </SelectItem>
+                  <SelectItem value="visitor">Visitor</SelectItem>
 
-                  <SelectItem value="other">
-                    Other
-                  </SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -95,33 +83,21 @@ export default function CreateComplaints() {
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="academic">
-                    Academic
-                  </SelectItem>
+                  <SelectItem value="academic">Academic</SelectItem>
 
-                  <SelectItem value="transport">
-                    Transport
-                  </SelectItem>
+                  <SelectItem value="transport">Transport</SelectItem>
 
-                  <SelectItem value="fee">
-                    Fee & Accounts
-                  </SelectItem>
+                  <SelectItem value="fee">Fee & Accounts</SelectItem>
 
-                  <SelectItem value="staff">
-                    Staff Behaviour
-                  </SelectItem>
+                  <SelectItem value="staff">Staff Behaviour</SelectItem>
 
                   <SelectItem value="facilities">
                     Facilities & Infrastructure
                   </SelectItem>
 
-                  <SelectItem value="discipline">
-                    Discipline
-                  </SelectItem>
+                  <SelectItem value="discipline">Discipline</SelectItem>
 
-                  <SelectItem value="other">
-                    Other
-                  </SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -130,8 +106,7 @@ export default function CreateComplaints() {
           {/* Complaint Description */}
           <div className="mt-6 space-y-2">
             <Label htmlFor="description">
-              Complaint Description{" "}
-              <span className="text-destructive">*</span>
+              Complaint Description <span className="text-destructive">*</span>
             </Label>
 
             <Textarea
@@ -141,23 +116,20 @@ export default function CreateComplaints() {
             />
           </div>
 
-
-          
           {/* Actions */}
-          <div className="mt-8 flex gap-3 justify-start">
-            <Link href="/front-office/complaints">
-              <Button variant="outline">Cancel</Button>
-            </Link>
 
-            <Button>
+          <div className="flex items-center gap-3 pt-8  ">
+            <Button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
               <AlertTriangle className="mr-2 h-4 w-4" />
               Submit Complaint
             </Button>
+            <Link href="/front-office/complaints">
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
-
-
-
-           
         </CardContent>
       </Card>
     </div>

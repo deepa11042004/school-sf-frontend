@@ -131,7 +131,6 @@ export default function AddVisitor() {
                       mode="single"
                       selected={checkInDate}
                       onSelect={setCheckInDate}
-                      
                     />
                   </PopoverContent>
                 </Popover>
@@ -185,17 +184,18 @@ export default function AddVisitor() {
           </div>
 
           {/* Actions */}
-          <div className="mt-8 flex flex-row gap-3 justify-start">
 
-            <Link href="/front-office/visitors">
-            <Button variant="outline">Cancel</Button>
-
-            </Link>
-
-            <Button>
+          <div className="flex items-center gap-3 pt-8  ">
+            <Button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
               <Users className="mr-2 h-4 w-4" />
               Check In
             </Button>
+            <Link href="/front-office/visitors">
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Layout from "@/components/cmsfullform/layout";
-import FeesInvoices from "@/components/fee/FeesInvoices";
+import ClassFeePlans from "@/components/fee/ClassFeePlans";
 
 export const metadata: Metadata = {
   title: "CMSFullForm Dashboard - OpenSource CMS",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <Layout>       
-      <FeesInvoices />
+      <ClassFeePlans />
     </Layout>
   );
 }

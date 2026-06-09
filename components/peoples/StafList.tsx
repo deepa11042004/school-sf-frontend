@@ -42,7 +42,6 @@ import {
   UserX,
   UserCog,
   KeyRound,
-   
 } from "lucide-react";
 
 import {
@@ -68,7 +67,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-
 const staffSections = [
   {
     title: "Personal Details",
@@ -92,9 +90,7 @@ const staffSections = [
   },
 ];
 
-
 import { dummyStaff, type Staff } from "@/components/data/staflist";
-
 
 export default function StaffList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -202,7 +198,7 @@ export default function StaffList() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>        
+          <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               Staff List
             </h1>
@@ -213,7 +209,7 @@ export default function StaffList() {
               onClick={() => setOpenImportDialog(true)}
               className="hover:bg-gray-300 dark:hover:bg-neutral-900 border border-black/20 dark:border-white/20"
             >
-              <Upload className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4" />
               Import
             </Button>
             <Button
@@ -221,7 +217,7 @@ export default function StaffList() {
               onClick={() => setOpenExportDialog(true)}
               className="hover:bg-gray-300 dark:hover:bg-neutral-900 border border-black/20 dark:border-white/20"
             >
-              <Download className="mr-2 h-4 w-4" />
+              <Upload className="mr-2 h-4 w-4" />
               Export
             </Button>
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">

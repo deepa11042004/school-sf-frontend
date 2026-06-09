@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarIcon, PhoneCall  } from "lucide-react";
+import { CalendarIcon, PhoneCall } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import Link from "next/link";
@@ -24,8 +24,6 @@ import {
 } from "@/components/ui/select";
 
 export default function AddPhoneCall() {
-
-
   const [callDate, setCallDate] = useState<Date | undefined>(new Date());
 
   const [callTime, setCallTime] = useState(
@@ -140,7 +138,6 @@ export default function AddPhoneCall() {
                       mode="single"
                       selected={callDate}
                       onSelect={setCallDate}
-                   
                     />
                   </PopoverContent>
                 </Popover>
@@ -197,22 +194,20 @@ export default function AddPhoneCall() {
             </div>
           </div>
 
-          
-
           {/* Actions */}
-          <div className="mt-8 flex flex-row gap-3 justify-start">
 
-            <Link href="/front-office/phone-calls">
-            <Button variant="outline">Cancel</Button>
-
-            </Link>
-
-            <Button>
-              <PhoneCall  className="mr-2 h-4 w-4" />
+          <div className="flex items-center gap-3 pt-8  ">
+            <Button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
+              <PhoneCall className="mr-2 h-4 w-4" />
               Save Call Log
             </Button>
+            <Link href="/front-office/phone-calls">
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
-
         </CardContent>
       </Card>
     </div>
