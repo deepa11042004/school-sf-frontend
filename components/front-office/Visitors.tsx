@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -135,10 +136,12 @@ export default function VisitorsLog() {
               Visitors Log
             </h1>
           </div>
-          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Visitor
-          </Button>
+          <Link href="/front-office/visitors/create">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Visitor
+            </Button>
+          </Link>
         </div>
 
         <Dialog open={openFilterDialog} onOpenChange={setOpenFilterDialog}>

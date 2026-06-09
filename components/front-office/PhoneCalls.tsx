@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -177,6 +178,7 @@ export default function PhoneCalls({
               Calls Log
             </h1>
           </div>
+          <Link href="/front-office/phone-calls/add-calls">
           <Button
             onClick={onAddCall}
             className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
@@ -184,6 +186,7 @@ export default function PhoneCalls({
             <Plus className="mr-2 h-4 w-4" />
             Add Call
           </Button>
+          </Link>
         </div>
 
         {/* filter pop up dialog */}

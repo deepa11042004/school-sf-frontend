@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -27,7 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-  DialogFooter
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { postalDummyData, type PostalRecord } from "@/components/data/postal";
 import {
@@ -166,13 +167,12 @@ export default function Postal({
               Print List
             </Button>
 
-            <Button
-              onClick={onAddNotice}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Add Notice
-            </Button>
+            <Link href="/front-office/postal/new-postal">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Notice
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -316,8 +316,6 @@ export default function Postal({
             </div>
           </CardContent>
         </Card>
-
-        
 
         {/* Table Section */}
         <Card className="shadow-sm ">

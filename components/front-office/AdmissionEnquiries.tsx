@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -183,10 +184,12 @@ export default function AdmissionEnquiries({
             </h1>
           </div>
           <div className="flex gap-3">
+            <Link href="/front-office/admission-enquiries/new-enquiries">
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
               New Enquiry
             </Button>
+            </Link>
           </div>
         </div>
 

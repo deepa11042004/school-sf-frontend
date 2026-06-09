@@ -40,8 +40,10 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
+  
 } from "lucide-react";
 import { format } from "date-fns";
+import Link from "next/link";
 
 interface ComplaintsProps {
   complaints?: Complaint[];
@@ -159,10 +161,13 @@ export default function Complaints({
           </div>
 
           <div className="flex gap-3">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            <Link href="/front-office/complaints/create-complaints">
+          
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
               New Complaint
             </Button>
+              </Link>
           </div>
         </div>
 
