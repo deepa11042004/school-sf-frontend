@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Profile from "@/components/profile/Profile";
+import Activities from "@/components/settings/Activities";
 import Layout from "@/components/cmsfullform/layout";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <Layout>
-      <Profile />
+      <Activities />
     </Layout>
   );
 }

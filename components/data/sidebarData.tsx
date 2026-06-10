@@ -701,7 +701,7 @@ export const menuData: MenuSection[] = [
           {
             id: "academic-year-setting",
             label: "Academic Year Settings",
-            href: "#",
+            href: "/settings/academic-year",
             icon: CalendarCog,
           },
         ],
@@ -717,13 +717,13 @@ export const menuData: MenuSection[] = [
           {
             id: "house",
             label: "House",
-            href: "#",
+          href: "/settings/houses",
             icon: ShieldCheck,
           },
           {
             id: "additional-activities",
             label: "Additional Activities",
-            href: "#",
+              href: "/settings/activities",
             icon: Activity,
           },
         ],
