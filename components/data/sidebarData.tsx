@@ -143,7 +143,7 @@ export const menuData: MenuSection[] = [
           {
             id: "admission-enquiries",
             label: "Admission Enquiries",
-           href: "/front-office/admission-enquiries",
+            href: "/front-office/admission-enquiries",
             icon: MessageCircleQuestionMark,
             isNew: true,
           },
@@ -156,7 +156,7 @@ export const menuData: MenuSection[] = [
           {
             id: "setup",
             label: "Setup",
-             href: "/front-office/setup",
+            href: "/front-office/setup",
             icon: Server,
           },
         ],
@@ -224,13 +224,13 @@ export const menuData: MenuSection[] = [
       {
         id: "staff-attendance",
         label: "Staff Attendance",
-       href: "/attendance/staff-attendance",
+        href: "/attendance/staff-attendance",
         icon: ContactRound,
       },
       {
         id: "staff-attendance-report",
         label: "Staff Attendance Report",
-       href: "/attendance/staff-attendance-report",
+        href: "/attendance/staff-attendance-report",
         icon: ListOrdered,
       },
     ],
@@ -267,13 +267,13 @@ export const menuData: MenuSection[] = [
           {
             id: "class-fee-plans",
             label: "Class Fee Plans",
-           href: "/fee/class-fee-plans",
+            href: "/fee/class-fee-plans",
             icon: ReceiptText,
           },
           {
             id: "fee-fine-rules",
             label: "Fee Fine Rules",
-           href: "/fee/fine-rules",
+            href: "/fee/fine-rules",
             icon: Scale,
           },
         ],
@@ -769,21 +769,21 @@ export const menuData: MenuSection[] = [
       {
         id: "student-settings",
         label: "Student Settings",
-        href: "#",
+        href: "/user-management/student-settting",
         icon: UserRoundCog,
       },
 
       {
         id: "school-admin-roles",
         label: "School Admin Roles",
-        href: "#",
+        href: "/user-management/school-admin-roles",
         icon: ShieldCheck,
       },
 
       {
         id: "admin-password-reset",
         label: "Admin Password Reset",
-        href: "#",
+        href: "/user-management/admin-password-reset",
         icon: KeyRound,
       },
     ],

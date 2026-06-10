@@ -163,6 +163,7 @@ export default function FrontOfficeSetup() {
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
+
   const groupedCategories = categories.reduce(
     (acc, category) => {
       if (!acc[category.groupKey]) {
@@ -315,62 +316,59 @@ export default function FrontOfficeSetup() {
       </Card>
 
       <Accordion type="multiple" className="w-full">
-  {Object.entries(groupedCategories).map(([groupName, items]) => (
-    <AccordionItem key={groupName} value={groupName}>
-      <AccordionTrigger>
-        {groupName}
-      </AccordionTrigger>
+        {Object.entries(groupedCategories).map(([groupName, items]) => (
+          <AccordionItem key={groupName} value={groupName}>
 
-      <AccordionContent>
-        <div className="overflow-hidden rounded-md border">
-          <div className="grid grid-cols-[1fr_120px_100px] border-b bg-muted/50 px-4 py-2 text-sm font-medium">
-            <div>Category Name</div>
-            <div>Status</div>
-            <div>Actions</div>
-          </div>
 
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-[1fr_120px_100px] items-center border-b px-4 py-3 last:border-0"
-            >
-              <div>{item.name}</div>
-
-              <div>
-                <Badge variant="secondary">
-                  {item.status}
-                </Badge>
+            <AccordionTrigger className="rounded-lg border px-10 my-2 hover:no-underline hover:bg-zinc-300 dark:hover:bg-zinc-800">
+              <div className="flex items-center justify-between w-full">
+                <span className="font-semibold">{groupName}</span>
               </div>
+            </AccordionTrigger>
 
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleEdit(item)}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
+            <AccordionContent>
+              <div className="overflow-hidden rounded-md border">
+                <div className="grid grid-cols-[1fr_120px_100px] border-b bg-muted/50 px-4 py-2 text-sm font-medium">
+                  <div>Category Name</div>
+                  <div>Status</div>
+                  <div>Actions</div>
+                </div>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-[1fr_120px_100px] items-center border-b px-4 py-3 last:border-0"
+                  >
+                    <div>{item.name}</div>
+
+                    <div>
+                      <Badge variant="secondary">{item.status}</Badge>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
-      </AccordionContent>
-    </AccordionItem>
-  ))}
-</Accordion>
-
-      
-      
-      
-       
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }
