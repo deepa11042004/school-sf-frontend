@@ -282,7 +282,7 @@ export const menuData: MenuSection[] = [
       {
         id: "miscellaneous",
         label: "Miscellaneous",
-        href: "#",
+        href: "/fee/miscellaneous",
         icon: Coins,
       },
 
@@ -296,13 +296,13 @@ export const menuData: MenuSection[] = [
           {
             id: "cashflow",
             label: "Cashflow",
-            href: "#",
+            href: "/acount/cashflow",
             icon: CircleDollarSign,
           },
           {
             id: "ledger",
             label: "Ledger",
-            href: "#",
+            href: "/acount/ledger",
             icon: BookOpenText,
           },
         ],
@@ -311,26 +311,26 @@ export const menuData: MenuSection[] = [
       {
         id: "expenses",
         label: "Expenses",
-        href: "/",
+        href: "#",
         badge: "3",
         icon: CreditCard,
         children: [
           {
             id: "expense-head",
             label: "Expense Head",
-            href: "#",
+            href: "/expenses/expenses-heads",
             icon: Receipt,
           },
           {
             id: "expense-list",
             label: "Expense List",
-            href: "#",
+            href: "/expenses/expenses-list",
             icon: FileText,
           },
           {
             id: "add-expense",
             label: "Add Expense",
-            href: "#",
+            href: "/expenses/expenses-list/create",
             icon: BadgeIndianRupee,
           },
         ],
