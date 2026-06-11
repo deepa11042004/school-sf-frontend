@@ -739,7 +739,7 @@ export const menuData: MenuSection[] = [
           {
             id: "general-settings",
             label: "General Settings",
-            href: "#",
+            href: "/settings/school-settings",
             icon: Settings,
           },
         ],
@@ -755,7 +755,7 @@ export const menuData: MenuSection[] = [
           {
             id: "roles-permissions-management",
             label: "Roles & Permissions",
-            href: "#",
+             href: "/settings/roles",
             icon: KeyRound,
           },
         ],

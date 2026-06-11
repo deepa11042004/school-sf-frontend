@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AcademicYear from "@/components/settings/AcademicYear";
+import RolesAndPermissions from "@/components/settings/RolesAndPermissions";
 import Layout from "@/components/cmsfullform/layout";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <Layout>
-      <AcademicYear />
+      <RolesAndPermissions />
     </Layout>
   );
 }

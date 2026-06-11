@@ -6,8 +6,7 @@ import {
   Eye,
   EyeOff,
   KeyRound,
-  AlertTriangle,
-  ShieldUser,
+  AlertTriangle,  
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
