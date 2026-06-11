@@ -398,11 +398,8 @@ export default function Sidebar() {
           </div>
 
           <div
-            className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 scrollbar-none"
-            style={{
-              scrollbarWidth: "none" /* Firefox */,
-              msOverflowStyle: "none" /* IE and Edge */,
-            }}
+            className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 "
+             
           >
             <div className="space-y-6">
               {menuData.map((section) => (
