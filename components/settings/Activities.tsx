@@ -1,5 +1,3 @@
- 
-
 "use client";
 
 import { useState } from "react";
@@ -24,8 +22,6 @@ import {
 } from "@/components/ui/table";
 import {
   Search,
-  Pencil,
-  Trash2,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -104,14 +100,11 @@ export default function Activities() {
   return (
     <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
-       
-
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               Additional Activities
-
             </h1>
           </div>
           <div className="flex gap-3">
@@ -119,7 +112,6 @@ export default function Activities() {
               <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Activities
-
               </Button>
             </Link>
           </div>
@@ -228,17 +220,18 @@ export default function Activities() {
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                              size="sm"
+                              className="border border-black/20 dark:border-white/20"
                             >
-                              <Pencil className="h-4 w-4" />
+                              Edit
                             </Button>
+
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              size="sm"
+                              className="border border-red-600 dark:border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              Delete
                             </Button>
                           </div>
                         </TableCell>

@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -22,45 +21,54 @@ import {
 } from "@/components/ui/table";
 import {
   Search,
+  Plus,
   ChevronLeft,
   ChevronRight,
   FileText,
-  Shield,
-  Plus,
 } from "lucide-react";
-
-interface Role {
+import Link from "next/link";
+interface Competition {
   id: string;
-  name: string;
-  guard: string;
-  permissionsCount: number;
+  title: string;
+  date: string;
+  description: string;
+  participants: number;
 }
 
-const dummyRoles: Role[] = [
-  { id: "1", name: "admin", guard: "web", permissionsCount: 119 },
-  { id: "2", name: "manager", guard: "web", permissionsCount: 236 },
-  { id: "3", name: "accountant", guard: "web", permissionsCount: 10 },
-  { id: "4", name: "teacher", guard: "web", permissionsCount: 33 },
-  { id: "5", name: "student", guard: "web", permissionsCount: 18 },
-  { id: "6", name: "guardian", guard: "web", permissionsCount: 5 },
-  { id: "7", name: "librarian", guard: "web", permissionsCount: 7 },
+const dummyCompetitions: Competition[] = [
+  {
+    id: "1",
+    title: "chess",
+    date: "11 Nov 2026",
+    description: "",
+    participants: 2,
+  },
+  {
+    id: "2",
+    title: "cricket",
+    date: "19 Aug 2026",
+    description: "",
+    participants: 6,
+  },
 ];
 
-export default function RolesAndPermissions() {
+export default function Competition() {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredRoles = dummyRoles.filter(
-    (role) =>
-      role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      role.guard.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredCompetitions = dummyCompetitions.filter(
+    (comp) =>
+      comp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      comp.description.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const totalPages = Math.ceil(filteredRoles.length / parseInt(entriesPerPage));
+  const totalPages = Math.ceil(
+    filteredCompetitions.length / parseInt(entriesPerPage),
+  );
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentRoles = filteredRoles.slice(startIndex, endIndex);
+  const currentCompetitions = filteredCompetitions.slice(startIndex, endIndex);
 
   const handleEntriesPerPageChange = (value: string) => {
     setEntriesPerPage(value);
@@ -106,18 +114,16 @@ export default function RolesAndPermissions() {
     <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
-
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Roles & Permissions
-            </h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Competitions
+          </h1>
+
           <div className="flex gap-3">
-            <Link href="/settings/roles/create">
+            <Link href="/competition/create">
               <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
                 <Plus className="mr-2 h-4 w-4" />
-                Create Role
+                Add Competition
               </Button>
             </Link>
           </div>
@@ -164,13 +170,16 @@ export default function RolesAndPermissions() {
                 <TableHeader>
                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Role Name
+                      Title
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Guard
+                      Date
+                    </TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                      Description
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3 text-center">
-                      Permissions Count
+                      Participants
                     </TableHead>
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
                       Actions
@@ -178,34 +187,35 @@ export default function RolesAndPermissions() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredRoles.length === 0 ? (
+                  {filteredCompetitions.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="h-64 text-center">
+                      <TableCell colSpan={5} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
                           <div className="p-3 rounded-full bg-slate-100">
                             <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            No roles found.
+                            No competitions found.
                           </p>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentRoles.map((role) => (
+                    currentCompetitions.map((comp) => (
                       <TableRow
-                        key={role.id}
+                        key={comp.id}
                         className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
                       >
-                        <TableCell className="py-3 capitalize">
-                          {role.name}
+                        <TableCell className="py-3 font-medium  capitalize">
+                          {comp.title}
                         </TableCell>
-                        <TableCell className="py-3  capitalize">
-                          {role.guard}
+                        <TableCell className="py-3 ">{comp.date}</TableCell>
+                        <TableCell className="py-3 ">
+                          {comp.description || "-"}
                         </TableCell>
                         <TableCell className="py-3 text-center">
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                            {role.permissionsCount}
+                            {comp.participants}
                           </span>
                         </TableCell>
                         <TableCell className="text-right py-3">
@@ -213,7 +223,7 @@ export default function RolesAndPermissions() {
                             <Button
                               variant="ghost"
                               size="sm"
-                             className="border border-black/20 dark:border-white/20"
+                              className="border border-black/20 dark:border-white/20"
                             >
                               Edit
                             </Button>

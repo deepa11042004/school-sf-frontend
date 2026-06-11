@@ -50,7 +50,6 @@ import {
 } from "@/components/ui/accordion";
 import { dummyGuardians, type Guardian } from "@/components/data/parents";
 
- 
 // Added sections data to power the Export Dialog Accordion
 const guardianSections = [
   {
@@ -69,8 +68,6 @@ const guardianSections = [
     fields: ["Child Name", "Class", "Section", "Admission No", "Relationship"],
   },
 ];
-
- 
 
 export default function Guardians() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -190,12 +187,10 @@ export default function Guardians() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-             
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Guardians
-            </h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Guardians
+          </h1>
+
           <div className="flex gap-3">
             <Button
               variant="outline"
@@ -512,7 +507,6 @@ export default function Guardians() {
                     <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
                       Is Primary
                     </TableHead>
-                     
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -543,16 +537,12 @@ export default function Guardians() {
                             {guardian.type}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3">
-                          {guardian.phone}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          {guardian.email}
-                        </TableCell>
+                        <TableCell className="py-3">{guardian.phone}</TableCell>
+                        <TableCell className="py-3">{guardian.email}</TableCell>
                         <TableCell className="py-3">
                           {guardian.children}
                         </TableCell>
-                        
+
                         <TableCell className=" py-3">
                           <Button
                             size="sm"

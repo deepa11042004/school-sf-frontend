@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/table";
 import {
   Search,
-  Pencil,
-  Trash2,
   ChevronLeft,
   ChevronRight,
   FileText,

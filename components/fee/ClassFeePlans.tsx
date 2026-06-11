@@ -33,8 +33,6 @@ import {
   Upload,
   Search,
   Plus,
-  Pencil,
-  Trash2,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -103,7 +101,7 @@ const dummyPlans: ClassFeePlan[] = [
     academicYear: "2026-27",
     className: "V - A",
     planName: "V A 2026-27",
-   status: "Inactive",
+    status: "Inactive",
   },
   {
     id: "9",
@@ -403,17 +401,18 @@ export default function ClassFeePlans() {
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                              size="sm"
+                              className="border border-black/20 dark:border-white/20"
                             >
-                              <Pencil className="h-4 w-4" />
+                              Edit
                             </Button>
+
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              size="sm"
+                              className="border border-red-600 dark:border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              Delete
                             </Button>
                           </div>
                         </TableCell>

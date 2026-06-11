@@ -83,35 +83,34 @@ export default function AddExpense() {
 
               {/* Date */}
               <div className="space-y-2">
-  <Label>
-    Date <span className="text-destructive">*</span>
-  </Label>
+                <Label>
+                  Date <span className="text-destructive">*</span>
+                </Label>
 
-  <Popover>
-    <PopoverTrigger asChild>
-      <Button
-        type="button"
-        variant="outline"
-        className={`w-full justify-start text-left font-normal ${
-          !date && "text-muted-foreground"
-        }`}
-      >
-        <CalendarIcon className="mr-2 h-4 w-4" />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${
+                        !date && "text-muted-foreground"
+                      }`}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
 
-        {date ? format(date, "dd/MM/yyyy") : "Select date"}
-      </Button>
-    </PopoverTrigger>
+                      {date ? format(date, "dd/MM/yyyy") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
 
-    <PopoverContent className="w-auto p-0" align="start">
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-      
-      />
-    </PopoverContent>
-  </Popover>
-</div>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
 
             {/* Amount */}

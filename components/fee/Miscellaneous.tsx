@@ -1,4 +1,3 @@
- 
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText, Eye, Pencil, Plus } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 
 interface MiscFeeRecord {
   id: string;
@@ -32,21 +31,19 @@ export default function Miscellaneous() {
     <div className="min-h-screen p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
-      
-           
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Miscellaneous Fees Dashboard
-            </h1>
 
-            <Link href='/fee/miscellaneous/create'>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Miscellaneous Fees Dashboard
+          </h1>
+
+          <Link href="/fee/miscellaneous/create">
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
               Assign New Fee
             </Button>
-            </Link>
-          </div>
-        
+          </Link>
+        </div>
 
         {/* Table Section */}
         <Card className="shadow-sm">
@@ -119,8 +116,8 @@ export default function Miscellaneous() {
                               fee.collectionPercentage >= 80
                                 ? "bg-green-100 text-green-800"
                                 : fee.collectionPercentage >= 50
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
                             }`}
                           >
                             {fee.collectionPercentage}%
@@ -130,17 +127,18 @@ export default function Miscellaneous() {
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                              size="sm"
+                              className="border border-black/20 dark:border-white/20"
                             >
-                              <Eye className="h-4 w-4" />
+                              View
                             </Button>
+
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-slate-600 hover:bg-slate-50 hover:text-slate-700"
+                              size="sm"
+                              className="border border-red-600 dark:border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                             >
-                              <Pencil className="h-4 w-4" />
+                              Edit
                             </Button>
                           </div>
                         </TableCell>

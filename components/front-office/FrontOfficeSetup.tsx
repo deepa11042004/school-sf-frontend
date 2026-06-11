@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Pencil, Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -318,8 +317,6 @@ export default function FrontOfficeSetup() {
       <Accordion type="multiple" className="w-full">
         {Object.entries(groupedCategories).map(([groupName, items]) => (
           <AccordionItem key={groupName} value={groupName}>
-
-
             <AccordionTrigger className="rounded-lg border px-10 my-2 hover:no-underline hover:bg-zinc-300 dark:hover:bg-zinc-800">
               <div className="flex items-center justify-between w-full">
                 <span className="font-semibold">{groupName}</span>
@@ -328,7 +325,7 @@ export default function FrontOfficeSetup() {
 
             <AccordionContent>
               <div className="overflow-hidden rounded-md border">
-                <div className="grid grid-cols-[1fr_120px_100px] border-b bg-muted/50 px-4 py-2 text-sm font-medium">
+                <div className="grid grid-cols-[1fr_400px_100px] border-b bg-muted/50 px-4 py-2 text-sm font-medium">
                   <div>Category Name</div>
                   <div>Status</div>
                   <div>Actions</div>
@@ -337,7 +334,7 @@ export default function FrontOfficeSetup() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="grid grid-cols-[1fr_120px_100px] items-center border-b px-4 py-3 last:border-0"
+                    className="grid grid-cols-[1fr_400px_100px] items-center border-b px-4 py-3 last:border-0"
                   >
                     <div>{item.name}</div>
 
@@ -345,21 +342,23 @@ export default function FrontOfficeSetup() {
                       <Badge variant="secondary">{item.status}</Badge>
                     </div>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-end gap-5  ">
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={() => handleEdit(item)}
+                        className="border border-black/20 dark:border-white/20"
                       >
-                        <Pencil className="h-4 w-4" />
+                        Edit
                       </Button>
 
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={() => handleDelete(item.id)}
+                        className="border border-red-600 dark:border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        Delete
                       </Button>
                     </div>
                   </div>

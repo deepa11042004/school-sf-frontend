@@ -25,7 +25,7 @@ import {
   ChevronRight,
   FileText,
   Upload,
-  RotateCcw,
+  RefreshCcw,
   Sheet,
   Filter,
 } from "lucide-react";
@@ -307,7 +307,7 @@ export default function GeneralLedger() {
             </Button>
 
             <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-              <RotateCcw className="mr-2 h-4 w-4" />
+              <RefreshCcw className="mr-2 h-4 w-4" />
               Reset
             </Button>
           </div>
@@ -454,7 +454,6 @@ export default function GeneralLedger() {
 
               {/* filter */}
               <div className="space-y-2 flex justify-end items-end">
-                 
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
