@@ -581,14 +581,14 @@ export const menuData: MenuSection[] = [
       {
         id: "logs-history",
         label: "Logs & History",
-        href: "#",
+        href: "/communications",
         icon: History,
       },
 
       {
         id: "compose-mail-sms",
         label: "Compose Mail/SMS",
-        href: "#",
+        href: "/communications/create",
         icon: Send,
       },
     ],
