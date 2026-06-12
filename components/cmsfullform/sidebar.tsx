@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { menuData } from "@/components/data/sidebarData";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 type MenuState = "full" | "collapsed" | "hidden";
 
 interface SubMenuItem {
@@ -38,6 +40,7 @@ export default function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const pathname = usePathname();
+const router = useRouter();
 
   // Cycle through menu states: full -> collapsed -> hidden -> full
   const toggleMenuState = () => {
@@ -167,7 +170,7 @@ export default function Sidebar() {
             toggleExpanded(itemId);
           } else if (item.href) {
             // Navigate to the href
-            window.location.href = item.href;
+           router.push(item.href);
             handleNavigation();
           }
         }}
