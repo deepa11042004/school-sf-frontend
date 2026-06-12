@@ -658,7 +658,7 @@ export const menuData: MenuSection[] = [
       {
         id: "report",
         label: "Report",
-        href: "#",
+        href: "/reports",
         icon: FileBarChart,
       },
     ],
