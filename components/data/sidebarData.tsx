@@ -346,7 +346,7 @@ export const menuData: MenuSection[] = [
           {
             id: "fees-report",
             label: "Fees Report",
-           href: "/fee/reports",
+            href: "/fee/reports",
             icon: BarChart3,
           },
           {
@@ -392,7 +392,7 @@ export const menuData: MenuSection[] = [
           {
             id: "collect-hostel-fee",
             label: "Collect Hostel Fees",
-           href: "/fee/reports/collection/hostel",
+            href: "/fee/reports/collection/hostel",
             icon: Building,
           },
           {
@@ -419,7 +419,7 @@ export const menuData: MenuSection[] = [
       {
         id: "subject",
         label: "Subject",
-      href: "/academic/subjects",
+        href: "/academic/subjects",
         icon: BookOpen,
       },
 
@@ -440,19 +440,19 @@ export const menuData: MenuSection[] = [
           {
             id: "class-time-table",
             label: "Class Time Table",
-            href: "#",
+            href: "/academic/timetable",
             icon: CalendarDays,
           },
           {
             id: "teacher-time-table",
             label: "Teacher Time Table",
-            href: "#",
+            href: "/academic/timetable/teacher",
             icon: UserRound,
           },
           {
             id: "school-time-table",
             label: "School Time Table",
-            href: "#",
+              href: "/academic/timetable/school",
             icon: Clock3,
           },
         ],
@@ -463,19 +463,19 @@ export const menuData: MenuSection[] = [
         label: "Study Material",
         href: "/academic/study-materials",
         icon: LibraryBig,
-      }, 
+      },
 
       {
         id: "homework",
         label: "Homework",
-       href: "/academic/homework",
+        href: "/academic/homework",
         icon: NotebookPen,
       },
 
       {
         id: "assignments",
         label: "Assignments",
-       href: "/academic/assignments",
+        href: "/academic/assignments",
         icon: ClipboardCheck,
       },
 
