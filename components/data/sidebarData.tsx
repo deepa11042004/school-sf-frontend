@@ -412,21 +412,21 @@ export const menuData: MenuSection[] = [
       {
         id: "class-room",
         label: "Class Room",
-        href: "#",
+        href: "/academic/class-room",
         icon: School,
       },
 
       {
         id: "subject",
         label: "Subject",
-        href: "#",
+      href: "/academic/subjects",
         icon: BookOpen,
       },
 
       {
         id: "classes",
         label: "Classes",
-        href: "/",
+        href: "/academic/school-classes",
         icon: Users,
       },
 
@@ -461,35 +461,35 @@ export const menuData: MenuSection[] = [
       {
         id: "study-material",
         label: "Study Material",
-        href: "#",
+        href: "/academic/study-materials",
         icon: LibraryBig,
-      },
+      }, 
 
       {
         id: "homework",
         label: "Homework",
-        href: "#",
+       href: "/academic/homework",
         icon: NotebookPen,
       },
 
       {
         id: "assignments",
         label: "Assignments",
-        href: "#",
+       href: "/academic/assignments",
         icon: ClipboardCheck,
       },
 
       {
         id: "question-bank",
         label: "Question Bank",
-        href: "#",
+        href: "/academic/question-bank/questions",
         icon: FileQuestion,
       },
 
       {
         id: "online-exam",
         label: "Online Exam",
-        href: "#",
+        href: "/online-exam/teacher/exams",
         icon: MonitorCheck,
       },
     ],

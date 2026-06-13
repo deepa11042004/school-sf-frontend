@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-
-import VisitorsLog from "@/components/front-office/Visitors";
+import CreateHomeWork from "@/components/Academic/internal/CreateHomeWork";
 
 export const metadata: Metadata = {
   title: " SF-Software Dashboard - OpenSource CMS",
@@ -8,5 +7,10 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return <VisitorsLog />;
+  return (
+    <>
+      <CreateHomeWork />
+    </>
+  );
 }
+ 
