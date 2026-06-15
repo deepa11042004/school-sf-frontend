@@ -22,14 +22,14 @@ const reportCategories = [
         description: "Monthly attendance summary",
         icon: CalendarCheck,
         color: "bg-blue-100 text-blue-600",
-        href: "/reports/attendance/student",
+        href: "/attendance/student-attendance-report",
       },
       {
         title: "Staff Attendance",
         description: "Staff monthly attendance",
         icon: UserCheck,
         color: "bg-emerald-100 text-emerald-600",
-        href: "/reports/attendance/staff",
+        href: "/attendance/staff-attendance-report",
       },
     ],
   },
@@ -41,14 +41,14 @@ const reportCategories = [
         description: "View exam results and reports",
         icon: GraduationCap,
         color: "bg-purple-100 text-purple-600",
-        href: "/reports/academic/examinations",
+        href: "/exam-maker/exams",
       },
       {
         title: "Get Report Card",
         description: "Generate bulk report cards in PDF",
         icon: FileBadge,
         color: "bg-indigo-100 text-indigo-600",
-        href: "/reports/academic/report-cards",
+        href: "/reports/academic/report-card",
       },
     ],
   },
@@ -60,7 +60,7 @@ const reportCategories = [
         description: "Fee collection status by class",
         icon: IndianRupee,
         color: "bg-amber-100 text-amber-600",
-        href: "/reports/financial/tuition-fees",
+        href: "/fee/reports",
       },
     ],
   },
@@ -72,14 +72,14 @@ const reportCategories = [
         description: "Generate Student ID Cards",
         icon: IdCard,
         color: "bg-cyan-100 text-cyan-600",
-        href: "/reports/student/id-cards",
+        href: "/peoples/students/id-cards",
       },
       {
         title: "Admit Card Generator",
         description: "Print Exam Admit Cards",
         icon: Ticket,
         color: "bg-rose-100 text-rose-600",
-        href: "/reports/student/admit-cards",
+       href: "/peoples/students/admit-cards",
       },
     ],
   },
@@ -99,7 +99,6 @@ export default function ReportsDashboard() {
             <div key={category.title} className="space-y-4">
               <h2 className="text-lg font-semibold  flex items-center gap-3">
                 {category.title}
-                <div className="h-px flex-1 bg-slate-200" />
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -1,9 +1,10 @@
+ 
+
 "use client";
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,67 +23,41 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Search,
   Plus,
+  Search,
+  FileText,
   ChevronLeft,
   ChevronRight,
-  FileText,
-  MoreVertical,
-  Eye,
-  Pencil,
-  Trash2,
 } from "lucide-react";
-import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-interface Competition {
+interface Vehicle {
   id: string;
-  title: string;
-  date: string;
-  description: string;
-  participants: number;
+  vehicleNo: string;
+  type: string;
+  capacity: number;
+  status: string;
 }
 
-const dummyCompetitions: Competition[] = [
-  {
-    id: "1",
-    title: "chess",
-    date: "11 Nov 2026",
-    description: "",
-    participants: 2,
-  },
-  {
-    id: "2",
-    title: "cricket",
-    date: "19 Aug 2026",
-    description: "",
-    participants: 6,
-  },
-];
-
-export default function Competition() {
+export default function Vehicles() {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredCompetitions = dummyCompetitions.filter(
-    (comp) =>
-      comp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comp.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  // Dummy data - keeping it empty to show the "No data available in table" state as requested
+  const dummyVehicles: Vehicle[] = [];
+
+  const filteredVehicles = dummyVehicles.filter(
+    (vehicle) =>
+      vehicle.vehicleNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(
-    filteredCompetitions.length / parseInt(entriesPerPage),
+    filteredVehicles.length / parseInt(entriesPerPage)
   );
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentCompetitions = filteredCompetitions.slice(startIndex, endIndex);
+  const currentVehicles = filteredVehicles.slice(startIndex, endIndex);
 
   const handleEntriesPerPageChange = (value: string) => {
     setEntriesPerPage(value);
@@ -127,16 +104,19 @@ export default function Competition() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Competitions
-          </h1>
-
+          <div>
+           
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Vehicles
+            </h1>
+          </div>
           <div className="flex gap-3">
-            <Link href="/competition/create">
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Competition
-              </Button>
+            <Link href="/management/transport/vehicles/create">
+            
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Vehicle
+            </Button>
             </Link>
           </div>
         </div>
@@ -145,7 +125,7 @@ export default function Competition() {
         <Card className="shadow-sm">
           <CardContent className="p-0">
             {/* Table Controls */}
-            <div className="p-4 md:p-6 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100">
+            <div className="p-4 md:p-6 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4  ">
               <div className="flex items-center gap-2 text-sm">
                 <span>Row Per Page</span>
                 <Select
@@ -177,29 +157,30 @@ export default function Competition() {
               </div>
             </div>
 
+            {/* Data Table */}
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Title
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
+                      Vehicle No
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Date
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
+                      Type
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
-                      Description
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
+                      Capacity
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3 text-center">
-                      Participants
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
+                      Status
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-right py-3">
-                      Actions
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider text-right py-3">
+                      Action
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredCompetitions.length === 0 ? (
+                  {currentVehicles.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center gap-2 text-slate-400">
@@ -207,57 +188,43 @@ export default function Competition() {
                             <FileText className="h-8 w-8 text-slate-400" />
                           </div>
                           <p className="text-sm font-medium text-slate-500">
-                            No competitions found.
+                            No data available in table
                           </p>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentCompetitions.map((comp) => (
+                    currentVehicles.map((vehicle) => (
                       <TableRow
-                        key={comp.id}
-                        className="border-b last:border-b-0 hover:bg-gray-300 dark:hover:bg-neutral-800 transition-colors"
+                        key={vehicle.id}
+                         
                       >
-                        <TableCell className="py-3 font-medium  capitalize">
-                          {comp.title}
+                        <TableCell className="py-3 font-medium">
+                          {vehicle.vehicleNo}
                         </TableCell>
-                        <TableCell className="py-3 ">{comp.date}</TableCell>
-                        <TableCell className="py-3 ">
-                          {comp.description || "-"}
-                        </TableCell>
-                        <TableCell className="py-3 text-center">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-800 text-white">
-                            {comp.participants}
+                        <TableCell className="py-3">{vehicle.type}</TableCell>
+                        <TableCell className="py-3">{vehicle.capacity}</TableCell>
+                        <TableCell className="py-3">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {vehicle.status}
                           </span>
                         </TableCell>
                         <TableCell className="text-right py-3">
                           <div className="flex items-center justify-end gap-2">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreVertical className="h-4 w-4 " />
-                                </Button>
-                              </DropdownMenuTrigger>
-
-                              <DropdownMenuContent align="end" className="w-52">
-                                <DropdownMenuItem>
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  View
-                                </DropdownMenuItem>
-
-                                <DropdownMenuItem>
-                                  <Pencil className="mr-2 h-4 w-4" />
-                                  Edit
-                                </DropdownMenuItem>
-
-                                <DropdownMenuSeparator />
-
-                                <DropdownMenuItem className="text-red-600 focus:text-red-600">
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="border border-black/20 dark:border-white/20"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="border border-red-600 dark:border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
+                            >
+                              Delete
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -271,6 +238,7 @@ export default function Competition() {
             {totalPages > 0 && (
               <div className="p-4 sm:p-6 border-t border-slate-100">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                   
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
@@ -320,7 +288,9 @@ export default function Competition() {
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                        setCurrentPage((prev) =>
+                          Math.min(totalPages, prev + 1)
+                        )
                       }
                       disabled={currentPage === totalPages}
                       className="h-8 w-8 p-0"

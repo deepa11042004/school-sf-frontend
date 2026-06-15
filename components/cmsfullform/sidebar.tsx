@@ -18,6 +18,7 @@ interface SubMenuItem {
   icon: LucideIcon;
   badge?: string;
   isNew?: boolean;
+  External?: boolean;
   children?: SubMenuItem[];
 }
 
@@ -28,6 +29,7 @@ interface MenuItem {
   icon: React.ComponentType<any>;
   badge?: string;
   isNew?: boolean;
+  External?: boolean;
   children?: SubMenuItem[];
 }
 
@@ -169,8 +171,11 @@ const router = useRouter();
           if (hasChildren) {
             toggleExpanded(itemId);
           } else if (item.href) {
-            // Navigate to the href
-           router.push(item.href);
+            if (item.External) {
+              window.open(item.href, '_blank', 'noopener,noreferrer');
+            } else {
+              router.push(item.href);
+            }
             handleNavigation();
           }
         }}
@@ -227,7 +232,11 @@ const router = useRouter();
     return (
       <div>
         {item.href && !hasChildren ? (
-          <Link href={item.href}>{content}</Link>
+          item.External ? (
+            <a href={item.href} target="_blank" rel="noopener noreferrer">{content}</a>
+          ) : (
+            <Link href={item.href}>{content}</Link>
+          )
         ) : (
           content
         )}

@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
-import { Mail, Send } from "lucide-react";
-
+import { Mail, Send, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function CreateCommunications() {
   const [messageType, setMessageType] = useState("Email");
@@ -35,8 +36,6 @@ export default function CreateCommunications() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Compose Message</h1>
-
-        
       </div>
 
       {/* Form */}
@@ -54,14 +53,10 @@ export default function CreateCommunications() {
               {/* Message Type */}
               <div className="space-y-2">
                 <Label>
-                  Message Type{" "}
-                  <span className="text-destructive">*</span>
+                  Message Type <span className="text-destructive">*</span>
                 </Label>
 
-                <Select
-                  value={messageType}
-                  onValueChange={setMessageType}
-                >
+                <Select value={messageType} onValueChange={setMessageType}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -76,8 +71,7 @@ export default function CreateCommunications() {
               {/* Recipient Group */}
               <div className="space-y-2">
                 <Label>
-                  Recipient Group{" "}
-                  <span className="text-destructive">*</span>
+                  Recipient Group <span className="text-destructive">*</span>
                 </Label>
 
                 <Select
@@ -89,25 +83,15 @@ export default function CreateCommunications() {
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="All Students">
-                      All Students
-                    </SelectItem>
+                    <SelectItem value="All Students">All Students</SelectItem>
 
-                    <SelectItem value="All Parents">
-                      All Parents
-                    </SelectItem>
+                    <SelectItem value="All Parents">All Parents</SelectItem>
 
-                    <SelectItem value="All Staff">
-                      All Staff
-                    </SelectItem>
+                    <SelectItem value="All Staff">All Staff</SelectItem>
 
-                    <SelectItem value="Teachers">
-                      Teachers
-                    </SelectItem>
+                    <SelectItem value="Teachers">Teachers</SelectItem>
 
-                    <SelectItem value="Accountants">
-                      Accountants
-                    </SelectItem>
+                    <SelectItem value="Accountants">Accountants</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -119,10 +103,7 @@ export default function CreateCommunications() {
                 Subject <span className="text-destructive">*</span>
               </Label>
 
-              <Input
-                placeholder="Enter message subject"
-                required
-              />
+              <Input placeholder="Enter message subject" required />
             </div>
 
             {/* Message */}
@@ -138,28 +119,31 @@ export default function CreateCommunications() {
               />
             </div>
 
-            {/* Info Notice */}
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-              <p className="text-sm text-blue-700">
-                The message will be sent to all recipients in the
-                selected group. Please review the content carefully
-                before sending.
-              </p>
-            </div>
+            {/* Information Notice */}
+            <Alert className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertTitle className="text-blue-900 dark:text-blue-100">
+                Compose Message
+
+              </AlertTitle>
+              <AlertDescription className="text-blue-800 dark:text-blue-200">
+                The message will be sent to all recipients in the selected
+                group. Please review the content carefully before sending.
+              </AlertDescription>
+            </Alert>
 
             {/* Footer */}
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-start">
-              
-
               <Button type="submit">
                 <Send className="mr-2 h-4 w-4" />
                 Send Message
               </Button>
 
-
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
+              <Link href="/communications">
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </Link>
             </div>
           </form>
         </CardContent>

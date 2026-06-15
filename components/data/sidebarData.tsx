@@ -64,6 +64,7 @@ import {
   Settings,
   CalendarCog,
   UserRoundCog,
+  CarFront,
 } from "lucide-react";
 
 interface SubMenuItem {
@@ -73,6 +74,7 @@ interface SubMenuItem {
   icon: LucideIcon;
   badge?: string;
   isNew?: boolean;
+  External?: boolean;
   children?: SubMenuItem[];
 }
 
@@ -83,6 +85,7 @@ interface MenuItem {
   icon: React.ComponentType<any>;
   badge?: string;
   isNew?: boolean;
+  External?: boolean;
   children?: SubMenuItem[];
 }
 
@@ -452,7 +455,7 @@ export const menuData: MenuSection[] = [
           {
             id: "school-time-table",
             label: "School Time Table",
-              href: "/academic/timetable/school",
+            href: "/academic/timetable/school",
             icon: Clock3,
           },
         ],
@@ -501,13 +504,13 @@ export const menuData: MenuSection[] = [
       {
         id: "Exam Patterns",
         label: "Exam Patterns",
-        href: "#",
+        href: "/exam-maker/pattern",
         icon: ClipboardList,
       },
       {
         id: "examination",
         label: "Examination",
-        href: "#",
+        href: "/exam-maker/exams",
         icon: FileCheck,
       },
     ],
@@ -526,13 +529,13 @@ export const menuData: MenuSection[] = [
           {
             id: "books",
             label: "Books",
-            href: "#",
+            href: "/management/library/books",
             icon: BookOpen,
           },
           {
             id: "circulation",
             label: "Circulation (Issues)",
-            href: "#",
+            href: "/management/library/circulation",
             icon: Repeat,
           },
         ],
@@ -541,7 +544,7 @@ export const menuData: MenuSection[] = [
       {
         id: "hostel",
         label: "Hostel",
-        href: "#",
+        href: "/management/hostels",
         icon: Building,
       },
 
@@ -555,19 +558,19 @@ export const menuData: MenuSection[] = [
           {
             id: "drivers",
             label: "Drivers",
-            href: "#",
-            icon: UserRound,
+            href: "/management/transport/drivers",
+            icon: CarFront,
           },
           {
             id: "vehicle",
             label: "Vehicle",
-            href: "#",
+            href: "/management/transport/vehicles",
             icon: Bus,
           },
           {
             id: "routes",
             label: "Routes",
-            href: "#",
+            href: "/management/transport/route",
             icon: Route,
           },
         ],
@@ -670,8 +673,9 @@ export const menuData: MenuSection[] = [
       {
         id: "e-learning",
         label: "E-Learning",
-        href: "#",
+        href: "https://edumy.powerrender.net/index.php",
         icon: MonitorPlay,
+        External: true,
       },
     ],
   },

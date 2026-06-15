@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Students from "@/components/peoples/Student";
+import IDCardGenerator from "@/components/peoples/IDCardGenerator";
 
 export const metadata: Metadata = {
   title: " SF-Software Dashboard - OpenSource CMS",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return <Students />;
+  return <IDCardGenerator />;
 }

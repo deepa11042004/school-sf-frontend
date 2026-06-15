@@ -70,7 +70,10 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { students as dummyStudents, Student } from "@/components/data/studentData";
+import {
+  students as dummyStudents,
+  Student,
+} from "@/components/data/studentData";
 
 const sections = [
   {
@@ -130,7 +133,6 @@ const sections = [
   },
 ];
 interface StudentActionsProps {
-  studentId: string;
   onView?: (id: string) => void;
   onReportCard?: (id: string) => void;
   onEdit?: (id: string) => void;
@@ -139,7 +141,6 @@ interface StudentActionsProps {
   onDelete?: (id: string) => void;
 }
 export default function Students({
-  studentId,
   onView,
   onReportCard,
   onEdit,
@@ -804,47 +805,34 @@ export default function Students({
                               </DropdownMenuTrigger>
 
                               <DropdownMenuContent align="end" className="w-52">
-                                <DropdownMenuItem
-                                  onClick={() => onView?.(studentId)}
-                                >
+                                <DropdownMenuItem>
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Student
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem
-                                  onClick={() => onReportCard?.(studentId)}
-                                >
+                                <DropdownMenuItem>
                                   <FileText className="mr-2 h-4 w-4" />
                                   Report Card
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem
-                                  onClick={() => onEdit?.(studentId)}
-                                >
+                                <DropdownMenuItem>
                                   <Pencil className="mr-2 h-4 w-4" />
                                   Edit
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem
-                                  onClick={() => onLoginDetails?.(studentId)}
-                                >
+                                <DropdownMenuItem>
                                   <KeyRound className="mr-2 h-4 w-4" />
                                   Login Details
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem
-                                  onClick={() => onDisable?.(studentId)}
-                                >
+                                <DropdownMenuItem>
                                   <Ban className="mr-2 h-4 w-4" />
                                   Disable
                                 </DropdownMenuItem>
 
                                 <DropdownMenuSeparator />
 
-                                <DropdownMenuItem
-                                  onClick={() => onDelete?.(studentId)}
-                                  className="text-red-600 focus:text-red-600"
-                                >
+                                <DropdownMenuItem className="text-red-600 focus:text-red-600">
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete
                                 </DropdownMenuItem>
