@@ -165,21 +165,17 @@ export default function AddVisitor() {
 
             {/* Number of Persons */}
             <div className="space-y-2">
-              <Label>Number of Persons</Label>
+              <Label htmlFor="persons">Number of Persons</Label>
 
-              <Select value={persons} onValueChange={setPersons}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-
-                <SelectContent>
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((count) => (
-                    <SelectItem key={count} value={String(count)}>
-                      {count}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input
+                id="persons"
+                type="number"
+                min={1}
+                max={10}
+                value={persons}
+                onChange={(e) => setPersons(e.target.value)}
+                placeholder="Enter number of persons"
+              />
             </div>
           </div>
 

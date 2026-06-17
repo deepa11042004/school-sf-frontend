@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+ 
 import {
   Accordion,
   AccordionContent,
@@ -43,6 +45,7 @@ import {
   FileText,
   Upload,
   Download,
+  HandCoins,
 } from "lucide-react";
 import {
   Dialog,
@@ -293,10 +296,12 @@ export default function Students({
               Export
             </Button>
 
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Student
-            </Button>
+            <Link href="/peoples/students/create">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Student
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -767,6 +772,9 @@ export default function Students({
                         </TableCell>
 
                         <TableCell className="py-3">
+                          <Link href={`/peoples/students/${student.id}`}>
+                          
+                          
                           <div className="flex flex-col">
                             <span className="font-medium  ">
                               {student.name}
@@ -775,9 +783,10 @@ export default function Students({
                               {student.fatherName}
                             </span>
                           </div>
+                          </Link>
                         </TableCell>
                         <TableCell className="py-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
+                          <span className="inline-flex max-w-xl items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
                             {student.className}
                           </span>
                         </TableCell>
@@ -789,11 +798,21 @@ export default function Students({
                         </TableCell>
                         <TableCell className="text-right py-3">
                           <div className="flex items-center justify-end gap-2">
-                            <Button variant="outline" size="sm">
+                            <Button
+                              className="hover:bg-zinc-300 dark:hover:bg-white/10"
+                              variant="outline"
+                              size="sm"
+                            >
+                              <HandCoins />
                               Collect Fees
                             </Button>
 
-                            <Button variant="outline" size="sm">
+                            <Button
+                              className="hover:bg-zinc-300 dark:hover:bg-white/10"
+                              variant="outline"
+                              size="sm"
+                            >
+                              <FileText />
                               See Invoices
                             </Button>
 

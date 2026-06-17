@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -220,10 +221,13 @@ export default function StaffList() {
               <Upload className="mr-2 h-4 w-4" />
               Export
             </Button>
+
+            <Link href="/peoples/staff/create">
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
               <Plus className="mr-2 h-4 w-4" />
               Add Staff
             </Button>
+            </Link>
           </div>
         </div>
 

@@ -6,8 +6,8 @@ import {
   User,
   CheckCircle2,
   XCircle,
-  Mail,
-  Phone,
+  Shapes,
+  BookUser,
   Hash,
   GraduationCap,
 } from "lucide-react";
@@ -19,15 +19,13 @@ export type UserStatus = "active" | "inactive";
 
 interface UserIdProps {
   name: string;
-  email?: string;
-  phone?: string;
-  address?: string;
+  lastname?: string;
+  class_Name?: string;
+  admissionNo?: number;
   role: UserRole;
   status: UserStatus;
   avatarUrl: string;
   userId?: string;
-  department?: string;
-  joinDate?: string;
 }
 
 const getRoleConfig = (role: UserRole) => {
@@ -40,7 +38,6 @@ const getRoleConfig = (role: UserRole) => {
         topGradient: "from-rose-500 via-pink-500 to-red-500",
         ringColor: "ring-rose-500/20",
         glowBg: "bg-rose-500",
-        iconAccent: "text-rose-500 dark:text-rose-400",
       };
     case "teacher":
       return {
@@ -50,7 +47,6 @@ const getRoleConfig = (role: UserRole) => {
         topGradient: "from-violet-500 via-purple-500 to-indigo-500",
         ringColor: "ring-violet-500/20",
         glowBg: "bg-violet-500",
-        iconAccent: "text-violet-500 dark:text-violet-400",
       };
     case "student":
     default:
@@ -61,7 +57,6 @@ const getRoleConfig = (role: UserRole) => {
         topGradient: "from-blue-500 via-cyan-500 to-teal-500",
         ringColor: "ring-blue-500/20",
         glowBg: "bg-blue-500",
-        iconAccent: "text-blue-500 dark:text-blue-400",
       };
   }
 };
@@ -103,9 +98,8 @@ function InfoChip({
 
   return (
     <div className="group/chip flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/80">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700">
-        {/* Fixed Icon rendering and applied dynamic accent color handling */}
-        <Icon className={`h-5 w-5 stroke-[2.5] text-red-500`} />
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700">
+        <Icon size={20} className={accent} />
       </div>
 
       <div className="min-w-0 flex-1">
@@ -122,8 +116,9 @@ function InfoChip({
 
 export default function UserId({
   name,
-  email,
-  phone,
+  lastname,
+  class_Name,
+  admissionNo,
   role,
   status,
   avatarUrl,
@@ -203,11 +198,14 @@ export default function UserId({
         <h2 className="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight leading-tight">
           {name}
         </h2>
+        <h2 className="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight leading-tight text-center inline-block">
+          {lastname}
+        </h2>
 
         <p
-          className={`mt-1 flex items-center justify-center gap-1.5 text-sm font-medium ${roleConfig.text}`}
+          className={`mt-1 flex items-center justify-center gap-1.5 text-lg font-medium ${roleConfig.text}`}
         >
-          <RoleIcon className="h-4 w-4" />
+          <RoleIcon className="h-5 w-5" />
           <span>{roleConfig.label}</span>
         </p>
 
@@ -222,24 +220,13 @@ export default function UserId({
 
         {/* Informational Data Grid Layout */}
         <div className="mt-5 grid gap-2 text-left">
+          <InfoChip icon={Hash} label="User ID" value={userId} />
           <InfoChip
-            icon={Hash}
-            label="User ID"
-            value={userId}
-            accent={roleConfig.iconAccent}
+            icon={BookUser}
+            label="Admission No."
+            value={String(admissionNo)}
           />
-          <InfoChip
-            icon={Mail}
-            label="Email"
-            value={email}
-            accent={roleConfig.iconAccent}
-          />
-          <InfoChip
-            icon={Phone}
-            label="Contact"
-            value={phone}
-            accent={roleConfig.iconAccent}
-          />
+          <InfoChip icon={Shapes} label="Class" value={class_Name} />
         </div>
       </CardContent>
     </Card>

@@ -9,7 +9,7 @@ import {
   User,
   ChevronDown,
   Home,
-  LogOut 
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "@/components/Layout/theme-toggle";
 import Link from "next/link";
 
 export default function TopNav() {
@@ -131,17 +131,12 @@ export default function TopNav() {
           </Badge>
         </Button>
 
-       
-
         {/* Profile Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center space-x-2 p-2">
               <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src="/1.jpg"
-                  alt="User"
-                />
+                <AvatarImage src="/1.jpg" alt="User" />
                 <AvatarFallback>
                   <User className="h-4 w-4" />
                 </AvatarFallback>
@@ -176,7 +171,7 @@ export default function TopNav() {
             <DropdownMenuItem className="text-red-600">
               <Link href="/auth/login" className="flex items-center">
                 <LogOut className="mr-2 h-4 w-4" />
-               Sign out
+                Sign out
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
