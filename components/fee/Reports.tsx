@@ -100,6 +100,54 @@ const ReportMonths = [
   "MAR",
 ] as const;
 
+// summary display
+const FeeAmountCell = ({
+  data,
+  color,
+  title,
+}: {
+  data: FeeSplit;
+  color: string;
+  title: string;
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className={`font-semibold hover:underline ${color}`}
+      >
+        ₹{data.total.toLocaleString("en-IN")}
+      </button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{title} Details</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-2">
+            {data.details.map((d, idx) => (
+              <div key={idx} className="flex justify-between text-sm">
+                <span>{d.feeName}</span>
+                <span>{d.value.toLocaleString("en-IN")}</span>
+              </div>
+            ))}
+
+            <div className="border-t pt-2 flex justify-between font-bold">
+              <span>Total</span>
+              <span className={`${color} `}>
+                ₹ {data.total.toLocaleString("en-IN")}
+              </span>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
 // FIX: Sticky offsets must match actual rendered widths:
 // S.No: 40px | Roll: 80px → offset 40 | Details: 260px → offset 120 | Phone: 120px → offset 380
 const STICKY_LEFT = {
@@ -303,44 +351,6 @@ function computeGrandTotal() {
 }
 
 const grandTotal = computeGrandTotal();
-
-// ─── FeeSplitColumn ───────────────────────────────────────────────────────────
-
-const FeeSplitColumn = ({
-  data,
-  colorClass,
-}: {
-  data: FeeSplit;
-  colorClass: "due" | "paid" | "pending";
-}) => {
-  const isRed =
-    colorClass === "pending"
-      ? data.total > 0
-      : colorClass === "paid"
-        ? data.total === 0
-        : false;
-
-  return (
-    <div className="text-xs leading-tight min-w-[68px]">
-      {data.details.map((d, idx) => (
-        // FIX: use idx in key to avoid duplicate feeName collisions
-        <div
-          key={`${d.feeName}-${idx}`}
-          className="flex justify-between gap-1 text-slate-500 tabular-nums"
-        >
-          <span className="shrink-0">{d.feeName}:</span>
-          <span>{d.value.toLocaleString("en-IN")}</span>
-        </div>
-      ))}
-      <div className="border-t border-slate-300 my-0.5" />
-      <div
-        className={`font-semibold tabular-nums ${isRed ? "text-red-600" : "text-blue-600"}`}
-      >
-        {data.total.toLocaleString("en-IN")}
-      </div>
-    </div>
-  );
-};
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -626,28 +636,28 @@ export default function FeesReport() {
                     <TableHead
                       rowSpan={2}
                       style={stickyHeadStyle("sno")}
-                      className={`${stickyHeadBg} min-w-[40px] w-[40px] text-slate-500 text-center border-b border-slate-200`}
+                      className={`${stickyHeadBg} min-w-[40px] w-[40px] text-center border-b border-slate-200`}
                     >
                       S.No.
                     </TableHead>
                     <TableHead
                       rowSpan={2}
                       style={stickyHeadStyle("roll")}
-                      className={`${stickyHeadBg} min-w-[80px] w-[80px] text-slate-500 text-center border-b border-slate-200`}
+                      className={`${stickyHeadBg} min-w-[80px] w-[80px]  text-center border-b border-slate-200`}
                     >
                       Roll
                     </TableHead>
                     <TableHead
                       rowSpan={2}
                       style={stickyHeadStyle("details")}
-                      className={`${stickyHeadBg} min-w-[260px] w-[260px] text-slate-500 border-b border-slate-200`}
+                      className={`${stickyHeadBg} min-w-[260px] w-[260px] border-b border-slate-200`}
                     >
                       Student Details
                     </TableHead>
                     <TableHead
                       rowSpan={2}
                       style={stickyHeadStyle("phone")}
-                      className={`${stickyHeadBg} min-w-[120px] w-[120px] text-slate-500 border-b border-slate-200`}
+                      className={`${stickyHeadBg} min-w-[120px] w-[120px]    border-b border-slate-200`}
                     >
                       Father / Phone
                     </TableHead>
@@ -656,7 +666,7 @@ export default function FeesReport() {
                       <TableHead
                         key={month}
                         colSpan={3}
-                        className="text-center bg-indigo-50 dark:bg-indigo-950/30 border-l border-slate-200 font-semibold text-indigo-800"
+                        className="text-center text-white   bg-neutral-950/30 border-l border-slate-200 font-semibold "
                       >
                         {month}
                       </TableHead>
@@ -664,7 +674,7 @@ export default function FeesReport() {
 
                     <TableHead
                       colSpan={3}
-                      className="text-center border-2 border-indigo-300 font-bold  "
+                      className="text-center border-2 border-slate-200 font-bold  "
                     >
                       TOTAL
                     </TableHead>
@@ -674,24 +684,24 @@ export default function FeesReport() {
                   <TableRow className="hover:bg-transparent">
                     {ReportMonths.map((month) => (
                       <Fragment key={`sub-${month}`}>
-                        <TableHead className="text-xs font-medium text-blue-600 bg-slate-50 dark:bg-neutral-900 border-l border-slate-200 py-1.5 whitespace-nowrap">
+                        <TableHead className="text-center text-xs font-medium text-blue-600 bg-slate-50 dark:bg-neutral-900 border-l border-slate-200 py-1.5 whitespace-nowrap">
                           Due
                         </TableHead>
-                        <TableHead className="text-xs font-medium text-green-700 bg-green-50/60 dark:bg-green-950/20 py-1.5 whitespace-nowrap">
+                        <TableHead className="text-center text-xs font-medium text-green-600 bg-green-50/60 dark:bg-green-950/20 py-1.5 whitespace-nowrap">
                           Paid
                         </TableHead>
-                        <TableHead className="text-xs font-medium text-red-500 bg-slate-50 dark:bg-neutral-900 py-1.5 whitespace-nowrap">
+                        <TableHead className="text-center text-xs font-medium text-red-500 bg-slate-50 dark:bg-neutral-900 py-1.5 whitespace-nowrap">
                           Pend.
                         </TableHead>
                       </Fragment>
                     ))}
-                    <TableHead className="text-xs font-bold text-indigo-700 border-l-2 border-indigo-200 bg-indigo-50/80 dark:bg-indigo-950/30 py-1.5">
+                    <TableHead className="text-center text-xs font-bold text-blue-600  border-l-2 border-indigo-200  bg-neutral-800/60 py-1.5">
                       Due
                     </TableHead>
-                    <TableHead className="text-xs font-bold text-indigo-700 bg-indigo-50/80 dark:bg-indigo-950/30 py-1.5">
+                    <TableHead className="text-center text-xs font-bold  text-green-600 bg-neutral-900/30 py-1.5">
                       Paid
                     </TableHead>
-                    <TableHead className="text-xs font-bold text-indigo-700 bg-indigo-50/80 dark:bg-indigo-950/30 py-1.5">
+                    <TableHead className="text-center text-xs font-bold text-red-500  bg-neutral-800/60 py-1.5">
                       Pend.
                     </TableHead>
                   </TableRow>
@@ -760,22 +770,25 @@ export default function FeesReport() {
                             student.monthly[month] ?? makeEmptyCell();
                           return (
                             <Fragment key={`${student.sno}-${month}`}>
-                              <TableCell className="border-l border-slate-100 align-top py-1.5 px-2">
-                                <FeeSplitColumn
+                              <TableCell className="border-l border-slate-100  py-1.5 px-2">
+                                <FeeAmountCell
                                   data={cell.due}
-                                  colorClass="due"
+                                  title={`${month} Due`}
+                                  color="text-blue-600"
                                 />
                               </TableCell>
-                              <TableCell className="align-top py-1.5 px-2">
-                                <FeeSplitColumn
+                              <TableCell className=" py-1.5 px-2  ">
+                                <FeeAmountCell
                                   data={cell.paid}
-                                  colorClass="paid"
+                                  title={`${month} Paid`}
+                                  color="text-green-600"
                                 />
                               </TableCell>
-                              <TableCell className="align-top py-1.5 px-2">
-                                <FeeSplitColumn
+                              <TableCell className="  py-1.5 px-2 ">
+                                <FeeAmountCell
                                   data={cell.pending}
-                                  colorClass="pending"
+                                  title={`${month} Pending`}
+                                  color="text-red-600"
                                 />
                               </TableCell>
                             </Fragment>
@@ -784,21 +797,24 @@ export default function FeesReport() {
 
                         {/* ── Total columns ── */}
                         <TableCell className="border-l-2 border-indigo-100 align-top py-1.5 px-2">
-                          <FeeSplitColumn
+                          <FeeAmountCell
                             data={student.total.due}
-                            colorClass="due"
+                            title="Total Due"
+                            color="text-blue-600"
                           />
                         </TableCell>
                         <TableCell className=" align-top py-1.5 px-2">
-                          <FeeSplitColumn
+                          <FeeAmountCell
                             data={student.total.paid}
-                            colorClass="paid"
+                            title="Total Paid"
+                            color="text-green-600"
                           />
                         </TableCell>
                         <TableCell className=" align-top py-1.5 px-2">
-                          <FeeSplitColumn
+                          <FeeAmountCell
                             data={student.total.pending}
-                            colorClass="pending"
+                            title="Total Pending"
+                            color="text-red-600"
                           />
                         </TableCell>
                       </TableRow>
@@ -822,28 +838,28 @@ export default function FeesReport() {
                       };
                       return (
                         <Fragment key={`gt-${month}`}>
-                          <TableCell className="border-l border-slate-300 text-xs text-blue-700 tabular-nums py-2 px-2 font-semibold">
+                          <TableCell className="text-center border-l border-slate-300 text-sm text-blue-700 tabular-nums py-2 px-2 font-semibold">
                             ₹{mt.due.toLocaleString("en-IN")}
                           </TableCell>
-                          <TableCell className="text-xs text-green-700 tabular-nums py-2 px-2 font-semibold">
+                          <TableCell className="text-center text-sm text-green-700 tabular-nums py-2 px-2 font-semibold">
                             ₹{mt.paid.toLocaleString("en-IN")}
                           </TableCell>
                           <TableCell
-                            className={`text-xs tabular-nums py-2 px-2 font-semibold ${mt.pending > 0 ? "text-red-600" : "text-slate-400"}`}
+                            className={`text-center text-sm tabular-nums py-2 px-2 font-semibold ${mt.pending > 0 ? "text-red-600" : "text-slate-400"}`}
                           >
                             ₹{mt.pending.toLocaleString("en-IN")}
                           </TableCell>
                         </Fragment>
                       );
                     })}
-                    <TableCell className="border-l-2 border-indigo-300   text-xs text-blue-800 tabular-nums py-2 px-2 font-bold">
+                    <TableCell className="border-l-2 border-indigo-300  text-center text-xs text-blue-800 tabular-nums py-2 px-2 font-bold">
                       ₹{grandTotal.grand.due.toLocaleString("en-IN")}
                     </TableCell>
-                    <TableCell className=" border-l-2 border-indigo-300  text-xs text-green-700 tabular-nums py-2 px-2 font-bold">
+                    <TableCell className=" border-l-2 border-indigo-300  text-center text-xs text-green-700 tabular-nums py-2 px-2 font-bold">
                       ₹{grandTotal.grand.paid.toLocaleString("en-IN")}
                     </TableCell>
                     <TableCell
-                      className={`border-l-2 border-indigo-300   text-xs tabular-nums py-2 px-2 font-bold ${grandTotal.grand.pending > 0 ? "text-red-600" : "text-slate-400"}`}
+                      className={`border-l-2 border-indigo-300  text-center text-xs tabular-nums py-2 px-2 font-bold ${grandTotal.grand.pending > 0 ? "text-red-600" : "text-slate-400"}`}
                     >
                       ₹{grandTotal.grand.pending.toLocaleString("en-IN")}
                     </TableCell>

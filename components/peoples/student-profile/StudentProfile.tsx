@@ -6,13 +6,15 @@ import { FileText, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UserId from "@/components/profile/UserCard";
 import BasicInfo from "./Tabs/BasicInfo";
-import ParentsGuardiansTab from "@/components/peoples/student-profile/Tabs/ParentsGuardiansTab"
-import AcademicTab from "@/components/peoples/student-profile/Tabs/AcademicTab"
-import DocumentTab from "@/components/peoples/student-profile/Tabs/DocumentTab"
-import ServicesTab from "@/components/peoples/student-profile/Tabs/ServicesTab"
+import ParentsGuardiansTab from "@/components/peoples/student-profile/Tabs/ParentsGuardiansTab";
+import AcademicTab from "@/components/peoples/student-profile/Tabs/AcademicTab";
+import DocumentTab from "@/components/peoples/student-profile/Tabs/DocumentTab";
+import ServicesTab from "@/components/peoples/student-profile/Tabs/ServicesTab";
+import GenerateCertificatesTab from "@/components/peoples/student-profile/Tabs/GenerateCertificatesTab";
+import StudentFeeDetails from "@/components/peoples/student-profile/Tabs/StudentFeeDetails";
+import ExaminationHistoryTab from "@/components/peoples/student-profile/Tabs/ExaminationHistoryTab";
+import AttendanceTab from "@/components/peoples/student-profile/Tabs/AttendanceTab";
 export default function StudentProfile() {
-  
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -41,12 +43,11 @@ export default function StudentProfile() {
           name="AADESH KUMAR"
           lastname="YADAV"
           class_Name="NC A"
-          admissionNo={1387}           
+          admissionNo={1387}
           role="student"
           status="active"
           avatarUrl="https://imgs.search.brave.com/TbJLUnWF6fkPvCmXPUcgwGGTvT5fuP2Fd8fuHrqPjQA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTUz/OTM1OTAvcGV4ZWxz/LXBob3RvLTE1Mzkz/NTkwL2ZyZWUtcGhv/dG8tb2YtcGhvdG8t/b2YtYS1zaGlydGxl/c3MtaGFuZHNvbWUt/bWFuLWFnYWluc3Qt/dGhlLXNreS5qcGVn/P2F1dG89Y29tcHJl/c3MmY3M9dGlueXNy/Z2ImZHByPTEmdz01/MDA"
           userId="STD0018"
-          
         />
 
         <div className="w-full lg:flex-1">
@@ -65,48 +66,40 @@ export default function StudentProfile() {
             </TabsList>
 
             <TabsContent value="basic">
-               <Card className="p-2"><BasicInfo/></Card>
-                
-              
+              <BasicInfo />
             </TabsContent>
 
             <TabsContent value="parents">
-              <Card ><ParentsGuardiansTab/></Card>
+              <ParentsGuardiansTab />
             </TabsContent>
 
-            
-             <TabsContent value="academic">
-              <Card ><AcademicTab/></Card>
+            <TabsContent value="academic">
+              <AcademicTab />
             </TabsContent>
 
-
-             <TabsContent value="documents">
-              <Card  ><DocumentTab/></Card>
+            <TabsContent value="documents">
+              <DocumentTab />
             </TabsContent>
 
-
-             <TabsContent value="services">
-              <Card ><ServicesTab/></Card>
+            <TabsContent value="services">
+              <ServicesTab />
             </TabsContent>
 
-
-               <TabsContent value="certificates">
-              <Card className="p-6">certificates</Card>
+            <TabsContent value="certificates">
+              <GenerateCertificatesTab />
             </TabsContent>
-
 
             <TabsContent value="examinations">
-              <Card className="p-6">examinations</Card>
+              <ExaminationHistoryTab />
             </TabsContent>
 
             <TabsContent value="attendance">
-              <Card className="p-6">attendance</Card>
+              <AttendanceTab />
             </TabsContent>
 
             <TabsContent value="fees">
-              <Card className="p-6">fees</Card>
+              <StudentFeeDetails />
             </TabsContent>
-
           </Tabs>
         </div>
       </div>

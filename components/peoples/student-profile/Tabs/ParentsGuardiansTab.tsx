@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge";
 
 const ParentsGuardiansTab = () => {
   return (
-    <CardContent>
-      <div className="grid gap-4 lg:grid-row-2 pt-5">
+     
+      <div className="grid gap-4 lg:grid-row-2 space-y-6 ">
         {/* Father */}
         <Card>
           <CardHeader>
@@ -57,7 +57,7 @@ const ParentsGuardiansTab = () => {
           </CardContent>
         </Card>
       </div>
-    </CardContent>
+   
   );
 };
 
