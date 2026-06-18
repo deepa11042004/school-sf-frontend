@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
- 
 import {
   Accordion,
   AccordionContent,
@@ -35,7 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { Separator } from "@/components/ui/separator";
 import {
   Search,
   Plus,
@@ -46,18 +45,9 @@ import {
   Upload,
   Download,
   HandCoins,
-} from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-
-import {
+  Copy,
+  Users,
+  Check,
   FileSpreadsheet,
   User,
   Phone,
@@ -72,6 +62,15 @@ import {
   Ban,
   Trash2,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import {
   students as dummyStudents,
@@ -162,8 +161,41 @@ export default function Students({
   const [openExportDialog, setOpenExportDialog] = useState(false);
   const [openFormatDialog, setOpenFormatDialog] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  //copy button
+  const [StudentLoginIdcopied, setStudentLoginIdCopied] = useState("");
+  const [ParentLoginIdcopied, setParentLoginIdCopied] = useState("");
   const [openFilterDialog, setOpenFilterDialog] = useState(false);
 
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+ 
+
+  const StudentLoginIdhandleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+
+      setStudentLoginIdCopied(text);
+
+      setTimeout(() => {
+        setStudentLoginIdCopied("");
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
+  };
+
+  const ParetntLoginhandleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+
+      setParentLoginIdCopied(text);
+
+      setTimeout(() => {
+        setParentLoginIdCopied("");
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
+  };
   const filteredStudents = dummyStudents.filter((student) => {
     const matchesSearch =
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -543,6 +575,76 @@ export default function Students({
               </div>
             </DialogContent>
           </Dialog>
+
+          <Dialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Login Details</DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-5">
+                <div className="rounded-lg border p-4">
+                  <p className="mb-2 font-medium">Student Login</p>
+
+                  <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2">
+                    <span className="font-mono">STD0018</span>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => StudentLoginIdhandleCopy}
+                      className="transition-transform active:scale-90"
+                    >
+                      {StudentLoginIdcopied ? (
+                        <Check className="h-4 w-4  " />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border p-4">
+                  <p className="mb-2 font-medium">
+                    {" "}
+                    Parent Login (RAJESH SINGH YADAV)
+                  </p>
+
+                  <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2">
+                    <span className="font-mono">Not Assigned </span>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => ParetntLoginhandleCopy}
+                      className="transition-transform active:scale-90"
+                    >
+                      {ParentLoginIdcopied ? (
+                        <Check className="h-4 w-4  " />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border bg-muted/40 p-4">
+                  <p className="mb-3 font-medium">Default Passwords</p>
+
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      Student:{" "}
+                      <code className="text-blue-600">Student@123</code>
+                    </div>
+
+                    <div>
+                      Parent: <code className="text-blue-600">Parent@123</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </>
 
         {/* filter pop up dialog */}
@@ -772,21 +874,19 @@ export default function Students({
                         </TableCell>
 
                         <TableCell className="py-3">
-                          <Link href={`/peoples/students/${student.id}`}>
-                          
-                          
-                          <div className="flex flex-col">
-                            <span className="font-medium  ">
-                              {student.name}
-                            </span>
-                            <span className="text-sm text-slate-500">
-                              {student.fatherName}
-                            </span>
-                          </div>
+                          <Link href={`/peoples/students/1`}>
+                            <div className="flex flex-col">
+                              <span className="font-medium  ">
+                                {student.name}
+                              </span>
+                              <span className="text-sm text-slate-500">
+                                {student.fatherName}
+                              </span>
+                            </div>
                           </Link>
                         </TableCell>
                         <TableCell className="py-3">
-                          <span className="inline-flex max-w-xl items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
+                          <span className="inline-flex max-w-xl items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-600 text-white capitalize">
                             {student.className}
                           </span>
                         </TableCell>
@@ -824,22 +924,35 @@ export default function Students({
                               </DropdownMenuTrigger>
 
                               <DropdownMenuContent align="end" className="w-52">
-                                <DropdownMenuItem>
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  View Student
-                                </DropdownMenuItem>
+                                <Link href={`/peoples/students/1`}>
+                                  <DropdownMenuItem>
+                                    <Eye className="mr-2 h-4 w-4" />
+                                    View Student
+                                  </DropdownMenuItem>
+                                </Link>
 
-                                <DropdownMenuItem>
-                                  <FileText className="mr-2 h-4 w-4" />
-                                  Report Card
-                                </DropdownMenuItem>
+                                <Link href={`#`}>
+                                  <DropdownMenuItem>
+                                    <FileText className="mr-2 h-4 w-4" />
+                                    Report Card
+                                  </DropdownMenuItem>
+                                </Link>
 
-                                <DropdownMenuItem>
-                                  <Pencil className="mr-2 h-4 w-4" />
-                                  Edit
-                                </DropdownMenuItem>
+                                <Link
+                                  href={`/peoples/students/1/edit`}
+                                >
+                                  <DropdownMenuItem>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                </Link>
 
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    setOpenLoginDialog(true);
+                                  }}
+                                >
                                   <KeyRound className="mr-2 h-4 w-4" />
                                   Login Details
                                 </DropdownMenuItem>

@@ -21,10 +21,10 @@ interface UserIdProps {
   name: string;
   lastname?: string;
   class_Name?: string;
-  admissionNo?: number;
+  admissionNo?: string;
   role: UserRole;
   status: UserStatus;
-  avatarUrl: string;
+  avatarUrl?: string;
   userId?: string;
 }
 
@@ -221,11 +221,7 @@ export default function UserId({
         {/* Informational Data Grid Layout */}
         <div className="mt-5 grid gap-2 text-left">
           <InfoChip icon={Hash} label="User ID" value={userId} />
-          <InfoChip
-            icon={BookUser}
-            label="Admission No."
-            value={String(admissionNo)}
-          />
+          <InfoChip icon={BookUser} label="Admission No." value={admissionNo} />
           <InfoChip icon={Shapes} label="Class" value={class_Name} />
         </div>
       </CardContent>

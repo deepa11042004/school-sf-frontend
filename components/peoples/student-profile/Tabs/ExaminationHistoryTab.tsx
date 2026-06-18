@@ -125,7 +125,7 @@ export default function ExaminationHistoryTab() {
             <AccordionItem
               key={exam.id}
               value={exam.id}
-              className="overflow-hidden rounded-xl border bg-card"
+              className="overflow-hidden rounded-lg border bg-card"
             >
               <AccordionTrigger className="px-5 py-4 hover:no-underline">
                 <div className="flex w-full items-center justify-between text-left">

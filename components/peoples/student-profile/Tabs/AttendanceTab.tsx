@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  CalendarDays,
-  CalendarCheck ,
-  Percent,
-} from "lucide-react";
+import { CalendarDays, CalendarCheck, Percent } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -24,13 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   ChartContainer,
@@ -163,103 +148,72 @@ const chartConfig = {
 export default function AttendanceTab() {
   return (
     <div className="space-y-6">
-      {/* Statistics */}
       <div className="grid gap-4 md:grid-cols-3">
-       <Card>
-  <CardContent className="flex items-center p-6">
-    <div className="rounded-full bg-indigo-100 p-3 dark:bg-indigo-900/20">
-      <CalendarDays className="h-6 w-6 text-indigo-600" />
-    </div>
+        <Card>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  Working Days
+                  <span className="block text-xs text-muted-foreground">
+                    (Excl. Holidays)
+                  </span>
+                </p>
+                <h2 className="text-2xl font-bold ">3</h2>
+              </div>
+              <CalendarDays className="h-10 w-10 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
 
-    <div className="ml-4">
-      <p className="text-sm font-medium text-muted-foreground">
-        Working Days (Excl. Holidays)
-      </p>
+        <Card>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground"> Present Days</p>
+                <h2 className="text-2xl font-bold text-green-600">3</h2>
+              </div>
+              <CalendarCheck className="h-10 w-10 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
 
-      <p className="text-3xl font-bold tracking-tight">
-        3
-      </p>
-    </div>
-  </CardContent>
-</Card>
-
-<Card>
-  <CardContent className="flex items-center p-6">
-    <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
-      <CalendarCheck  className="h-6 w-6 text-green-600" />
-    </div>
-
-    <div className="ml-4">
-      <p className="text-sm font-medium text-muted-foreground">
-        Present Days
-      </p>
-
-      <p className="text-3xl font-bold tracking-tight text-green-600">
-        3
-      </p>
-    </div>
-  </CardContent>
-</Card>
-
-<Card>
-  <CardContent className="flex items-center p-6">
-    <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
-      <Percent className="h-6 w-6 text-blue-600" />
-    </div>
-
-    <div className="ml-4">
-      <p className="text-sm font-medium text-muted-foreground">
-        Attendance Rate
-      </p>
-
-      <p className="text-3xl font-bold tracking-tight text-blue-600">
-        100%
-      </p>
-    </div>
-  </CardContent>
-</Card>
+        <Card>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  {" "}
+                  Attendance Rate
+                </p>
+                <h2 className="text-2xl font-bold text-red-600"> 100%</h2>
+              </div>
+              <Percent className="h-10 w-10 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            Monthly Attendance Breakdown
-          </CardTitle>
+          <CardTitle>Monthly Attendance Breakdown</CardTitle>
         </CardHeader>
 
         <CardContent>
-          <ChartContainer
-            config={chartConfig}
-            className="h-[350px] w-full"
-          >
+          <ChartContainer config={chartConfig} className="h-[350px] w-full">
             <BarChart data={attendanceData}>
               <CartesianGrid vertical={false} />
 
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} />
 
               <YAxis allowDecimals={false} />
 
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent />}
-              />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
 
-              <Bar
-                dataKey="present"
-                fill="var(--color-present)"
-                radius={4}
-              />
+              <Bar dataKey="present" fill="var(--color-present)" radius={4} />
 
-              <Bar
-                dataKey="working"
-                fill="var(--color-working)"
-                radius={4}
-              />
+              <Bar dataKey="working" fill="var(--color-working)" radius={4} />
             </BarChart>
           </ChartContainer>
         </CardContent>
@@ -268,9 +222,7 @@ export default function AttendanceTab() {
       {/* Monthly Report */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            Detailed Monthly Report
-          </CardTitle>
+          <CardTitle>Detailed Monthly Report</CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -290,13 +242,13 @@ export default function AttendanceTab() {
             <TableBody>
               {attendanceData.map((row) => (
                 <TableRow key={row.month}>
-                  <TableCell className="font-medium">
-                    {row.month}
+                  <TableCell className="font-medium">{row.month}</TableCell>
+
+                  <TableCell>{row.working}</TableCell>
+
+                  <TableCell className="text-green-600">
+                    {row.present}
                   </TableCell>
-
-                  <TableCell  >{row.working}</TableCell>
-
-                  <TableCell className="text-green-600">{row.present}</TableCell>
 
                   <TableCell className="text-red-600">{row.absent}</TableCell>
 

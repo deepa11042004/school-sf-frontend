@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import Link from "next/link";
 import { FileText, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UserId from "@/components/profile/UserCard";
@@ -20,7 +20,7 @@ export default function StudentProfile() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          Full Name
+          Student Details
         </h1>
 
         <div className="flex gap-3">
@@ -31,10 +31,14 @@ export default function StudentProfile() {
             <FileText className="mr-2 h-4 w-4" />
             Report Card
           </Button>
+
+          <Link href={`/peoples/students/1/edit`}>
+         
           <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
             <SquarePen className="mr-2 h-4 w-4" />
             Edit Student
           </Button>
+           </Link>
         </div>
       </div>
 
@@ -43,7 +47,7 @@ export default function StudentProfile() {
           name="AADESH KUMAR"
           lastname="YADAV"
           class_Name="NC A"
-          admissionNo={1387}
+          admissionNo='1387'
           role="student"
           status="active"
           avatarUrl="https://imgs.search.brave.com/TbJLUnWF6fkPvCmXPUcgwGGTvT5fuP2Fd8fuHrqPjQA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTUz/OTM1OTAvcGV4ZWxz/LXBob3RvLTE1Mzkz/NTkwL2ZyZWUtcGhv/dG8tb2YtcGhvdG8t/b2YtYS1zaGlydGxl/c3MtaGFuZHNvbWUt/bWFuLWFnYWluc3Qt/dGhlLXNreS5qcGVn/P2F1dG89Y29tcHJl/c3MmY3M9dGlueXNy/Z2ImZHByPTEmdz01/MDA"

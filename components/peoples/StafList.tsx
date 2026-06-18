@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,9 +41,12 @@ import {
   Pencil,
   Trash2,
   Shield,
-  UserX,
+  Ban,
   UserCog,
   KeyRound,
+  Copy,
+  Check,
+  ShieldCheck,
 } from "lucide-react";
 
 import {
@@ -91,6 +95,8 @@ const staffSections = [
   },
 ];
 
+const roles = ["Teacher", "Manager", "Accountant", " 2"];
+
 import { dummyStaff, type Staff } from "@/components/data/staflist";
 
 export default function StaffList() {
@@ -105,6 +111,32 @@ export default function StaffList() {
   const [openFormatDialog, setOpenFormatDialog] = useState(false);
   const [openFilterDialog, setOpenFilterDialog] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>(["Teacher"]);
+  const [openRolesDialog, setOpenRolesDialog] = useState(false);
+
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const toggleRole = (role: string) => {
+    setSelectedRoles((prev) =>
+      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role],
+    );
+  };
+ 
+
+  const handleSave = () => {
+    console.log(selectedRoles);
+    setOpenRolesDialog(false);
+  };
+
+  const handleCopy = async (text: string, field: string) => {
+    await navigator.clipboard.writeText(text);
+
+    setCopiedField(field);
+
+    setTimeout(() => {
+      setCopiedField(null);
+    }, 1500);
+  };
 
   const activeFilterCount =
     (selectedType !== "all" ? 1 : 0) + (selectedStatus !== "all" ? 1 : 0);
@@ -223,10 +255,10 @@ export default function StaffList() {
             </Button>
 
             <Link href="/peoples/staff/create">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Staff
-            </Button>
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Staff
+              </Button>
             </Link>
           </div>
         </div>
@@ -496,6 +528,97 @@ export default function StaffList() {
           </DialogContent>
         </Dialog>
 
+        {/* Login Details */}
+        <Dialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Login Details</DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              {/* Username */}
+              <div className="rounded-lg border p-4">
+                <p className="mb-2 text-sm font-medium">Username</p>
+
+                <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2">
+                  <span className="font-mono">TEACH0011</span>
+
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => handleCopy("TEACH0011", "username")}
+                    className="transition-transform active:scale-90"
+                  >
+                    {copiedField === "username" ? (
+                      <Check className="h-4 w-4  " />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="rounded-lg border p-4">
+                <p className="mb-2 text-sm font-medium">Status</p>
+
+                <Badge className="bg-green-700 text-white">Active</Badge>
+              </div>
+
+              {/* Default Password */}
+              <div className="rounded-lg border  p-4">
+                <p className="mb-3 font-medium">Default Password</p>
+
+                <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2">
+                  <code className="text-blue-500">Primary Phone Number</code>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Assign Roles */}
+
+        <Dialog open={openRolesDialog} onOpenChange={setOpenRolesDialog}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5" />
+                Assign Roles
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="grid gap-3 sm:grid-cols-2 ">
+              {roles.map((role) => (
+                <label
+                  key={role}
+                  className="flex items-center gap-3 rounded-lg border p-3 cursor-pointer hover:bg-muted/50"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedRoles.includes(role)}
+                    onChange={() => toggleRole(role)}
+                    className="h-4 w-4"
+                  />
+
+                  <span className="text-sm">{role}</span>
+                </label>
+              ))}
+            </div>
+
+            <DialogFooter className="flex sm:justify-start">
+              <Button onClick={handleSave}>Save Changes</Button>
+
+              <Button
+                variant="outline"
+                onClick={() => setOpenRolesDialog(false)}
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         {/* Search + Filter Bar */}
         <Card className="shadow-sm">
           <CardContent className="p-4 sm:p-6">
@@ -562,31 +685,31 @@ export default function StaffList() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50/10 hover:bg-slate-50/10">
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       ID
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Name
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Type
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Roles
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Phone
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Email
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Status
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider py-3">
                       Joining Date
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center py-3">
+                    <TableHead className="text-xs font-semibold  uppercase tracking-wider text-center py-3">
                       Actions
                     </TableHead>
                   </TableRow>
@@ -614,21 +737,18 @@ export default function StaffList() {
                         <TableCell className="py-3 font-medium">
                           {staff.id}
                         </TableCell>
+
                         <TableCell className="py-3 font-medium">
-                          {staff.name}
+                          <Link href={`/peoples/staff/1`}>{staff.name}</Link>
                         </TableCell>
                         <TableCell className="py-3">
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
                             {staff.type}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3 text-slate-600">
-                          {staff.roles}
-                        </TableCell>
-                        <TableCell className="py-3 text-slate-600">
-                          {staff.phone}
-                        </TableCell>
-                        <TableCell className="py-3 text-slate-600 max-w-[100px] truncate">
+                        <TableCell className="py-3 ">{staff.roles}</TableCell>
+                        <TableCell className="py-3 ">{staff.phone}</TableCell>
+                        <TableCell className="py-3  max-w-[100px] truncate">
                           {staff.email}
                         </TableCell>
                         <TableCell className="py-3">
@@ -636,7 +756,7 @@ export default function StaffList() {
                             {staff.status}
                           </span>
                         </TableCell>
-                        <TableCell className="py-3 text-slate-600">
+                        <TableCell className="py-3 ">
                           {staff.joiningDate
                             ? format(
                                 new Date(staff.joiningDate),
@@ -652,22 +772,29 @@ export default function StaffList() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
+                              <Link href={`/peoples/staff/1`}>
+                                <DropdownMenuItem>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Staff
+                                </DropdownMenuItem>
+                              </Link>
+                              <Link href={`/peoples/staff/1/edit`}>
+                                <DropdownMenuItem>
+                                  <Pencil className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                              </Link>
                               <DropdownMenuItem>
-                                <Eye className="mr-2 h-4 w-4" />
-                                View Staff
-                              </DropdownMenuItem>
-
-                              <DropdownMenuItem>
-                                <Pencil className="mr-2 h-4 w-4" />
-                                Edit
-                              </DropdownMenuItem>
-
-                              <DropdownMenuItem>
-                                <UserX className="mr-2 h-4 w-4" />
+                                <Ban className="mr-2 h-4 w-4" />
                                 Disable Login
                               </DropdownMenuItem>
 
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onSelect={(e) => {
+                                  e.preventDefault();
+                                  setOpenLoginDialog(true);
+                                }}
+                              >
                                 <Shield className="mr-2 h-4 w-4" />
                                 Login Details
                               </DropdownMenuItem>
@@ -677,7 +804,12 @@ export default function StaffList() {
                                 Reset Password
                               </DropdownMenuItem>
 
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onSelect={(e) => {
+                                  e.preventDefault();
+                                  setOpenRolesDialog(true);
+                                }}
+                              >
                                 <UserCog className="mr-2 h-4 w-4" />
                                 Assign Roles
                               </DropdownMenuItem>
