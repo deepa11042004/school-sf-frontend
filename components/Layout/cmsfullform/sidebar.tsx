@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { menuData } from "@/components/data/sidebarData";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname,useRouter } from "next/navigation";
+ 
 
 type MenuState = "full" | "collapsed" | "hidden";
 
@@ -113,6 +113,7 @@ const router = useRouter();
     if (isMobile) {
       setIsMobileMenuOpen(false);
     }
+    setExpandedItems(new Set());
   }
 
   const toggleExpanded = (itemId: string) => {
@@ -121,6 +122,7 @@ const router = useRouter();
       if (newSet.has(itemId)) {
         newSet.delete(itemId);
       } else {
+        newSet.clear();
         newSet.add(itemId);
       }
       return newSet;
